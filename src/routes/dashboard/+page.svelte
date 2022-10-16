@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
+
 	import type { Pantry } from '$lib/Pantry';
 
 	import type { PageData } from './$types';
@@ -11,7 +13,11 @@
 
 	const newPantry = async (e: Event) => {
 		e.preventDefault();
-		await fetch('/pantries', { method: 'POST', body: JSON.stringify({ name: newPantryName }) });
+		const pantry = (await (
+			await fetch('/pantries', { method: 'POST', body: JSON.stringify({ name: newPantryName }) })
+		).json()) as Pantry;
+		// location.assign(`/pantries/${pantry._id}`);
+		invalidate('/pantries');
 	};
 </script>
 

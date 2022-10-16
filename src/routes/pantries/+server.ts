@@ -1,5 +1,5 @@
 import { PantryModel } from '$lib/db';
-import type { RequestHandler } from '@sveltejs/kit';
+import type { Actions, RequestHandler } from '@sveltejs/kit';
 
 export const getAllPantries = async () => {
   return await PantryModel.find();
@@ -24,3 +24,13 @@ const formDataOrJson = async (request: Request): Promise<Record<string, unknown>
   const text = await request.text();
   return JSON.parse(text);
 };
+
+// export const actions: Actions = {
+//   default: async (event) => {
+//     const pantryData = await event.request.formData();
+//     console.log(pantryData);
+//     // const pantryData = event.params;
+//     const pantryDoc = new PantryModel(pantryData);
+//     return new Response(JSON.stringify(await pantryDoc.save()));
+//   }
+// };
