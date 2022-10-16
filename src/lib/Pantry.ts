@@ -1,6 +1,10 @@
 import { model, Schema } from 'mongoose';
 
-export type Item = {};
+export type Item = {
+  _id: Id;
+  name: string;
+  imageURL: URL | null;
+};
 export type Id = string;
 
 export type Pantry = {
