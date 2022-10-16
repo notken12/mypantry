@@ -6,6 +6,13 @@ MyPantry is an app that lets you create, manage, and share pantries. Easily mana
 
 # Todo
 
+- [ ] POST pantry
+  - [ ] Auth
+  - [x] DB
+- [x] GET pantry
+- [ ] PUT pantry
+- [ ] DELETE pantry
+- [x] Firebase Auth
 - [ ] Homepage
 - [ ] About us page
 - [ ] Dashboard
