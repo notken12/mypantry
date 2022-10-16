@@ -1,24 +1,11 @@
 <script lang="ts">
-	import { GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'firebase/auth';
+	import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 	import { auth } from '$lib/firebase';
+	import { user } from '$lib/stores';
 	const provider = new GoogleAuthProvider();
 
-	let signInText = 'Loading...';
-
-	onAuthStateChanged(auth, (user) => {
-		if (user) {
-			// User is signed in, see docs for a list of available properties
-			// https://firebase.google.com/docs/reference/js/firebase.User
-			const uid = user.uid;
-			signInText = 'Signed in as ' + (auth.currentUser?.displayName || '(no name)');
-			// ...
-		} else {
-			// User is signed out
-			// ...
-			signInText = 'Not signed in';
-		}
-	});
+	$: signInText = $user ? `Signed in as ${$user?.displayName}` : 'Loading...';
 
 	const signInWithGoogle = async () => {
 		try {
