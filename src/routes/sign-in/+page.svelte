@@ -5,7 +5,7 @@
 	import { user } from '$lib/stores';
 	const provider = new GoogleAuthProvider();
 
-	$: signInText = $user ? `Signed in as ${$user?.displayName}` : 'Loading...';
+	$: signInText = $user ? `Signed in as ${$user?.displayName}` : 'Not signed in';
 
 	const signInWithGoogle = async () => {
 		try {

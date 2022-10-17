@@ -1,4 +1,5 @@
 import { PantryModel } from '$lib/db';
+import { auth, getUid } from '$lib/firebase-admin';
 import type { Actions, RequestHandler } from '@sveltejs/kit';
 
 export const getAllPantries = async () => {
@@ -14,7 +15,8 @@ export const GET: RequestHandler = async () => {
 /** Do POST /pantries with pantry data to create a new pantry */
 export const POST: RequestHandler = async ({ request }) => {
   const pantryData = await formDataOrJson(request);
-  console.log(pantryData);
+  const uid = await getUid(request);
+  console.log(`Request from user ${uid}`);
   // const pantryData = event.params;
   const pantryDoc = new PantryModel(pantryData);
   return new Response(JSON.stringify(await pantryDoc.save()));
