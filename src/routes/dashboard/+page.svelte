@@ -4,7 +4,6 @@
 	import { fetchAuthed } from '$lib/fetch';
 	import type { Pantry } from '$lib/Pantry';
 	import { loaded, user } from '$lib/stores';
-	import Page from '../pantries/[id]/+page.svelte';
 
 	import type { PageData } from './$types';
 
@@ -42,5 +41,5 @@
 		<input type="text" name="name" placeholder="Name" bind:value={newPantryName} />
 		<input type="submit" value="GO" />
 	</form>
-	<p>{$user?.displayName}</p>
+	<p>{$user?.displayName ?? 'Not signed in'}</p>
 </main>
