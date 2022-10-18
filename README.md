@@ -6,8 +6,8 @@ MyPantry is an app that lets you create, manage, and share pantries. Easily mana
 
 # Todo
 
-- [ ] POST pantry
-  - [ ] Auth
+- [x] POST pantry
+  - [x] Auth
   - [x] DB
 - [x] GET pantry
 - [ ] PUT pantry
@@ -17,12 +17,12 @@ MyPantry is an app that lets you create, manage, and share pantries. Easily mana
 - [ ] About us page
 - [ ] Dashboard
   - [ ] My Pantries view
-  - [ ] Create pantry button
+  - [x] Create pantry button
 - [ ] Pantry dashboard
   - [ ] Inventory
-    - [ ] Item listing
+    - [x] Item listing
     - [ ] Create new item
-      - [ ] Name item
+      - [x] Name item
       - [ ] Specify amount
     - [ ] Check-in/out item (brings you to check-in/check-out page)
   - [ ] Info
