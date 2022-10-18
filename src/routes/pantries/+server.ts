@@ -16,9 +16,9 @@ export const GET: RequestHandler = async () => {
 export const POST: RequestHandler = async ({ request }) => {
   const pantryData = await formDataOrJson(request);
   const uid = await getUid(request);
-  console.log(`Request from user ${uid}`);
-  // const pantryData = event.params;
-  const pantryDoc = new PantryModel(pantryData);
+  if (!uid) return new Response(null, { status: 401 });
+
+  const pantryDoc = new PantryModel({ owner: uid, editors: [uid], ...pantryData });
   return new Response(JSON.stringify(await pantryDoc.save()));
 };
 

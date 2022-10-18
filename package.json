@@ -23,6 +23,7 @@
 		"firebase-admin": "^11.1.0",
 		"firebaseui": "^6.0.1",
 		"mongoose": "^6.6.5",
+		"nanoid": "^4.0.0",
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.7.0",
 		"svelte": "^3.51.0",
