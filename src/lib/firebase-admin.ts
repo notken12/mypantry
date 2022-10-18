@@ -2,6 +2,8 @@
 import { initializeApp } from 'firebase-admin/app';
 import { FIREBASE_ADMIN_CONFIG } from '$env/static/private';
 import admin, { credential } from 'firebase-admin';
+import type { Id } from './Pantry';
+import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 
 const serviceAccount = JSON.parse(FIREBASE_ADMIN_CONFIG);
 export const app = initializeApp({
@@ -15,4 +17,12 @@ export const getUid = async (request: Request) => {
   if (!idToken) return null;
   const token = await auth.verifyIdToken(idToken).catch(console.error);
   return token?.uid;
+};
+
+export const getUsers = async (uids: Id[]) => {
+  const users: Record<Id, UserRecord> = {};
+  for (const uid of uids) {
+    users[uid] = await auth.getUser(uid);
+  }
+  return users;
 };

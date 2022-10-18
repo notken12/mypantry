@@ -6,13 +6,15 @@
 	export let data: PageData;
 	export let pantry: Pantry = data.pantry;
 	export let users = data.users;
+	console.log(users);
 </script>
 
 <main>
 	<a href="/dashboard">Back to dashboard</a>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
 	<p>
-		Owner: {users[pantry.owner].displayName}
+		Owner: {users[pantry.owner]?.displayName}
+		{pantry.owner}
 	</p>
 	<h2>Items</h2>
 	<ul>
