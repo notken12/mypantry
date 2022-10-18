@@ -7,7 +7,20 @@ if (DB_KEY == undefined)
   throw new Error("Error: couldn't find database key. Add DB_KEY=<database key here> to .env file");
 await mongoose.connect(DB_KEY);
 
-const ItemSchema = new Schema<Item>({});
+const ItemSchema = new Schema<Item>({
+  _id: {
+    type: String,
+    default: () => nanoid()
+  },
+  name: {
+    type: String,
+    required: true
+  },
+  imageURL: {
+    type: String,
+    required: false
+  }
+});
 
 const PantrySchema = new Schema<Pantry>({
   _id: {
