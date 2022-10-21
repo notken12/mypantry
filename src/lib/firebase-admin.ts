@@ -4,6 +4,7 @@ import { FIREBASE_ADMIN_CONFIG } from '$env/static/private';
 import admin, { credential } from 'firebase-admin';
 import type { Id } from './Pantry';
 import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
+import type { RequestEvent } from '@sveltejs/kit';
 
 const serviceAccount = JSON.parse(FIREBASE_ADMIN_CONFIG);
 export const app = initializeApp({
@@ -12,8 +13,9 @@ export const app = initializeApp({
 });
 export const auth = admin.auth();
 
-export const getUid = async (request: Request) => {
-  const idToken = request.headers.get('firebaseIdToken');
+export const getUid = async (event: RequestEvent) => {
+  const idToken =
+    event.request.headers.get('firebaseIdToken') ?? event.cookies.get('firebaseIdToken');
   if (!idToken) return null;
   const token = await auth.verifyIdToken(idToken).catch(console.error);
   return token?.uid;
