@@ -29,6 +29,11 @@ export const POST: RequestHandler = async (event) => {
   return new Response(JSON.stringify(await pantryDoc.save()));
 };
 
+//export const PUT: RequestHandler = async (event) => {
+
+
+//}
+
 const formDataOrJson = async (request: Request): Promise<Record<string, unknown>> => {
   const text = await request.text();
   return JSON.parse(text);
