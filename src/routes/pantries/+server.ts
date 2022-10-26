@@ -33,6 +33,10 @@ export const POST: RequestHandler = async (event) => {
 
 
 //}
+//export const DELETE: RequestHandler = async (event) => {
+
+
+//}
 
 const formDataOrJson = async (request: Request): Promise<Record<string, unknown>> => {
   const text = await request.text();
