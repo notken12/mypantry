@@ -21,8 +21,14 @@ export const POST: RequestHandler = async (event) => {
   const pantryDoc = await PantryModel.findById(params.id);
   if (pantryDoc?.owner !== uid && !pantryDoc?.editors.find((e) => e === uid))
     return new Response(null, { status: 401 });
-  pantryDoc
+  pantryDoc.set(itemData);
   const result = await pantryDoc.save();
   return new Response(JSON.stringify(result));
   
 }
+
+export const DELETE: RequestHandler = async ({ params }) => {
+  const pantry = await PantryModel.findById(params.id);
+  pantry?.delete();
+  return new Response(JSON.stringify(pantry));
+};
