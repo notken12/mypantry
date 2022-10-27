@@ -12,15 +12,32 @@
 	export let users = data.users;
 
 	let newItemName = '';
+	let amountOfItem = 0;
 	const newItem = async (e: Event) => {
 		e.preventDefault();
 		const name = newItemName;
 		newItemName = '';
+		const amount = amountOfItem;
+		amountOfItem = 0;
 		await fetchAuthed(`/pantries/${pantry._id}/inventory`, {
 			method: 'POST',
-			body: JSON.stringify({ name })
+			body: JSON.stringify({ name, amount })
 		});
 		// invalidate(`/pantries/${pantry._id}`);
+		invalidateAll();
+	};
+	let newPantryName = '';
+	let newPantryDesc = '';
+	const editPantryDesc = async (e: Event) => {
+		e.preventDefault();
+		const name = newPantryName;
+		newPantryName = '';
+		const description = newPantryDesc;
+		newPantryDesc = '';
+		await fetchAuthed(`/pantries/${pantry._id}`, {
+			method: 'POST',
+			body: JSON.stringify({ name, description })
+		});
 		invalidateAll();
 	};
 </script>
@@ -28,18 +45,25 @@
 <main>
 	<a href="/dashboard">Back to dashboard</a>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
+	<p>{pantry.description}</p>
+	<form on:submit={editPantryDesc}>
+		<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
+		<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc}>
+		<input type="submit" value="Change" />
+	</form>
 	<p>
-		Owner: {users[pantry.owner]?.displayName}
-		{pantry.owner}
+		Owner: {users[pantry.owner]?.displayName}<br>
+		Owner Id: {pantry.owner}
 	</p>
 	<h2>Items</h2>
 	<ul>
 		{#each pantry.inventory as item}
-			<li>{item.name}</li>
+			<li>{item.name}: {item.amount}</li>
 		{/each}
 	</ul>
 	<form on:submit={newItem}>
 		<input type="text" placeholder="Item name" bind:value={newItemName} />
+		<input type="number" placeholder="Amount" bind:value={amountOfItem} />
 		<input type="submit" value="New item" />
 	</form>
 </main>

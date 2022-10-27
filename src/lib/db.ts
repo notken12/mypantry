@@ -16,6 +16,10 @@ const ItemSchema = new Schema<Item>({
     type: String,
     required: true
   },
+  amount: {
+    type:Number,
+    required:true
+  },
   imageURL: {
     type: String,
     required: false
@@ -28,6 +32,7 @@ const PantrySchema = new Schema<Pantry>({
     default: () => nanoid(11)
   },
   name: String,
+  description: String,
   createdDate: {
     type: Date,
     default: () => Date.now()
