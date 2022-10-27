@@ -20,8 +20,8 @@
 		const pantry = (await (
 			await fetchAuthed('/pantries', { method: 'POST', body: JSON.stringify({ name }) })
 		).json()) as Pantry;
-		// location.assign(`/pantries/${pantry._id}`);
 		invalidate('/pantries');
+		window.location.assign(`/pantries/${pantry._id}`);
 	};
 </script>
 
