@@ -16,21 +16,21 @@ MyPantry is an app that lets you create, manage, and share pantries. Easily mana
 - [ ] Homepage
 - [ ] About us page
 - [ ] Dashboard
-  - [ ] My Pantries view
+  - [x] My Pantries view
   - [x] Create pantry button
 - [ ] Pantry dashboard
   - [ ] Inventory
     - [x] Item listing
-    - [ ] Create new item
+    - [x] Create new item
       - [x] Name item
-      - [ ] Specify amount
+      - [x] Specify amount
     - [ ] Check-in/out item (brings you to check-in/check-out page)
   - [ ] Info
   - [ ] Share button
     - [ ] Copies url
   - [ ] Invite owners
   - [ ] View history
-  - [ ] Delete pantry
+  - [x] Delete pantry
 - [ ] Check-in/check-out
   - [ ] Use link or scan code
   - [ ] Listing of items
