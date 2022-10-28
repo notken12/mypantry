@@ -63,7 +63,7 @@
 	<p>{pantry.description ?? 'No description provided'}</p>
 	<form on:submit={editPantryDesc}>
 		<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
-		<input type="text" name="new pantry description" placeholder="New Pantry Description" bind:value={newPantryDesc}>
+		<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc}>
 		<input type="submit" value="Change" />
 	</form>
 	<p>

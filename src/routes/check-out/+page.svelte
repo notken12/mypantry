@@ -1,3 +1,0 @@
-<main>
-	<a href="../">Home</a>
-</main>
