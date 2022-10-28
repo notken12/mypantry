@@ -12,13 +12,16 @@
 	$: pantries = data.pantries;
 
 	let newPantryName: string;
+	let newPantryDescription: string;
 
 	const newPantry = async (e: Event) => {
 		e.preventDefault();
 		const name = newPantryName;
 		newPantryName = '';
+		const description = newPantryDescription;
+		newPantryDescription = '';
 		const pantry = (await (
-			await fetchAuthed('/pantries', { method: 'POST', body: JSON.stringify({ name }) })
+			await fetchAuthed('/pantries', { method: 'POST', body: JSON.stringify({ name, description }) })
 		).json()) as Pantry;
 		invalidate('/pantries');
 		window.location.assign(`/pantries/${pantry._id}`);
@@ -26,6 +29,7 @@
 </script>
 
 <main>
+	<a href="../">Home</a>
 	<h1>My Pantries</h1>
 	<section>
 		<ul>
@@ -39,6 +43,7 @@
 	<form on:submit={newPantry}>
 		<legend>New pantry</legend>
 		<input type="text" name="name" placeholder="Name" bind:value={newPantryName} />
+		<input type="text" name="description" placeholder="Description" bind:value={newPantryDescription} />
 		<input type="submit" value="GO" />
 	</form>
 	<p>{$user?.displayName ?? 'Not signed in'}</p>

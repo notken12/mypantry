@@ -19,6 +19,7 @@
 </script>
 
 <main>
+	<a href="../">Home</a>
 	<button on:click={signInWithGoogle}>Sign in with Google</button>
 	<h2>{signInText}</h2>
 </main>

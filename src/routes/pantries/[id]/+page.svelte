@@ -42,7 +42,7 @@
 	};
 	let confirmDelete = '';
 	const deletePantry = async() => {
-		if (confirmDelete == pantry.name) {
+		if (confirmDelete == pantry.name || !pantry.name) {
 			await fetchAuthed(`/pantries/${pantry._id}`, {
 				method: 'DELETE',
 			});
@@ -55,14 +55,15 @@
 <main>
 	<a href="/dashboard">Back to dashboard</a>
 	<form on:submit={deletePantry}>
+		<legend style="color:red;">Delete Pantry</legend>
 		<input type="text" placeholder="Type the name of this pantry to delete it" bind:value={confirmDelete} />
 		<input type="submit" value="Delete" />
 	</form>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
-	<p>{pantry.description}</p>
+	<p>{pantry.description ?? 'No description provided'}</p>
 	<form on:submit={editPantryDesc}>
 		<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
-		<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc}>
+		<input type="text" name="new pantry description" placeholder="New Pantry Description" bind:value={newPantryDesc}>
 		<input type="submit" value="Change" />
 	</form>
 	<p>
