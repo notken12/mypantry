@@ -1,11 +1,14 @@
+
 <script lang="ts">
 	import { invalidate, invalidateAll } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	import { fetchAuthed } from '$lib/fetch';
 
 	import type { Pantry } from '$lib/Pantry';
 
 	import type { PageData } from './$types';
+	import * as QRCode  from 'qrcode';
 
 	export let data: PageData;
 	export let pantry: Pantry = data.pantry;
@@ -23,7 +26,6 @@
 			method: 'POST',
 			body: JSON.stringify({ name, amount })
 		});
-		// invalidate(`/pantries/${pantry._id}`);
 		invalidateAll();
 	};
 	let newPantryName = '';
@@ -41,34 +43,42 @@
 		invalidateAll();
 	};
 	let confirmDelete = '';
-	const deletePantry = async() => {
+	const deletePantry = async () => {
 		if (confirmDelete == pantry.name || !pantry.name) {
 			await fetchAuthed(`/pantries/${pantry._id}`, {
-				method: 'DELETE',
+				method: 'DELETE'
 			});
 			invalidateAll();
-			window.location.replace("../../dashboard");
+			window.location.replace('../../dashboard');
 		} else confirmDelete = '';
-	}
+	};
+	let qrcodeCanvas: HTMLCanvasElement;
+	onMount(() => {
+		QRCode.toCanvas(qrcodeCanvas, window.location.href, console.error);
+	});
 </script>
 
 <main>
 	<a href="/dashboard">Back to dashboard</a>
 	<form on:submit={deletePantry}>
 		<legend style="color:red;">Delete Pantry</legend>
-		<input type="text" placeholder="Type the name of this pantry to delete it" bind:value={confirmDelete} />
+		<input
+			type="text"
+			placeholder="Type the name of this pantry to delete it"
+			bind:value={confirmDelete}
+		/>
 		<input type="submit" value="Delete" />
 	</form>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
 	<p>{pantry.description ?? 'No description provided'}</p>
 	<form on:submit={editPantryDesc}>
 		<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
-		<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc}>
+		<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
 		<input type="submit" value="Change" />
 	</form>
 	<p>
-		Owner: {users[pantry.owner]?.displayName}<br>
-		Owner Id: {pantry.owner}
+		Owner(s): {users[pantry.owner]?.displayName}<br />
+		Owner Id(s): {pantry.owner}
 	</p>
 	<h2>Items</h2>
 	<ul>
@@ -81,4 +91,5 @@
 		<input type="number" placeholder="Amount" bind:value={amountOfItem} />
 		<input type="submit" value="New item" />
 	</form>
+	<canvas bind:this="{qrcodeCanvas}"></canvas>
 </main>
