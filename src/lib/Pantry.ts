@@ -38,18 +38,20 @@ export type EditInfo = OperationInterface & {
 	};
 };
 
+export type CheckoutData = {
+	optionalInfo: {
+		firstName: string | null;
+		lastName: string | null;
+		additionalRemarks: string | null;
+	};
+	itemAmounts: Record<Id, number>;
+	approved: boolean;
+};
+
 export type CheckoutItems = OperationInterface & {
 	opType: 'CheckoutItems';
 	uid: Id | null;
-	data: {
-		optionalInfo: {
-			firstName: string | null;
-			lastName: string | null;
-			additionalRemarks: string | null;
-		};
-		itemAmounts: Record<Id, number>;
-		approved: boolean;
-	};
+	data: CheckoutData;
 };
 
 export type Operation = EditItems | NewItem | CheckoutItems | EditInfo;
@@ -66,11 +68,10 @@ export type Pantry = {
 };
 
 export type CheckOutRequest = {
-  pantryId: Id;
-  firstName: string;
-  lastName: string;
-  createdDate: Date;
-  additionalRemarks: string;
-  checkout: Record<Id, number>;
-
-}
+	pantryId: Id;
+	firstName: string;
+	lastName: string;
+	createdDate: Date;
+	additionalRemarks: string;
+	checkout: Record<Id, number>;
+};

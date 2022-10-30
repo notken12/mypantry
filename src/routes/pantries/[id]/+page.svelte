@@ -134,8 +134,21 @@
 					{:else if op.opType === 'EditInfo'}
 						<p>Name: {op.data.newInfo.name}</p>
 						<p>Description: {op.data.newInfo.description}</p>
+					{:else if op.opType === 'CheckoutItems'}
+						<div>
+							<p>Request by {op.data.optionalInfo.firstName} {op.data.optionalInfo.lastName}</p>
+							<p>Additional Remarks: {op.data.optionalInfo.additionalRemarks}</p>
+						</div>
+						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
+						<ul>
+							{#each Object.entries(op.data.itemAmounts) as [id, amount]}
+								<li>
+									{pantry.inventory.find((i) => i._id === id)?.name}: {amount}
+								</li>
+							{/each}
+						</ul>
 					{:else}
-						<p>{JSON.stringify(op.data)}</p>
+						<p>Cannot display, raw data: {JSON.stringify(op.data)}</p>
 					{/if}
 					<p>{new Date(op.timestamp).toLocaleString()}</p>
 				</li>
