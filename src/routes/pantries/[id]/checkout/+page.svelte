@@ -3,7 +3,6 @@
 	import type { CheckoutData, Id, Pantry } from '$lib/Pantry';
 	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 	import type { PageData } from './$types';
-	import Modal from '$lib/Modal.svelte';
 
 	export let data: PageData;
 	let pantry: Pantry;

@@ -65,9 +65,9 @@
 	let newItemModal: Modal;
 	let shareModal: Modal;
 	onMount(() => {
-		/*QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
+		QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
 			qrCodeImage.src = url;
-		});*/
+		});
 		editorStatus = $user?.uid == pantry.owner; //edit this later for collaborators
 	});
 
@@ -170,11 +170,11 @@
 		</ul>
 	</div>
 	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
-	<!--<button on:click={shareModal.open}>Share Checkout Page</button>
-	<Modal title="Share" bind:this={shareModal}>
+	<button on:click={shareModal.open}>Share Checkout Page</button>
+	<Modal title="shareModal" bind:this={shareModal}>
 		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
 		<b>Scan me to checkout!</b>
 		<img bind:this={qrCodeImage} alt="QR code" width="200" />
 		<a href={qrCodeImage?.src} download>Download QRCode as image</a>
-	</Modal>-->
+	</Modal>
 </main>
