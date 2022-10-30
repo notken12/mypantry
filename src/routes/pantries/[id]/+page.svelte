@@ -8,10 +8,13 @@
 
 	import type { PageData } from './$types';
 	import * as QRCode from 'qrcode';
+	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 
 	export let data: PageData;
-	export let pantry: Pantry = data.pantry;
-	export let users = data.users;
+	let pantry: Pantry;
+	$: pantry = data.pantry;
+	let users: Record<string, UserRecord>;
+	$: users = data.users;
 
 	let newItemName = '';
 	let amountOfItem = 0;
@@ -25,7 +28,7 @@
 			method: 'POST',
 			body: JSON.stringify({ name, amount })
 		});
-		invalidateAll();
+		invalidate(`.`);
 	};
 	let newPantryName = '';
 	let newPantryDesc = '';
@@ -39,7 +42,7 @@
 			method: 'POST',
 			body: JSON.stringify({ name, description })
 		});
-		invalidateAll();
+		console.log(await invalidateAll());
 	};
 	let confirmDelete = '';
 	const deletePantry = async (e: Event) => {
@@ -88,8 +91,14 @@
 		{#each pantry.inventory as item, i}
 			<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
 			<li>{item.name}: {item.amount}</li>
-			<input type="number" max="{item.amount}" min="0" placeholder="Amount to check out" bind:value={amountsToCheckOut[i]} />
-			<br>
+			<input
+				type="number"
+				max={item.amount}
+				min="0"
+				placeholder="Amount to check out"
+				bind:value={amountsToCheckOut[i]}
+			/>
+			<br />
 		{/each}
 	</ul>
 	<form on:submit={newItem}>
@@ -101,16 +110,16 @@
 	<form>
 		<legend>Cart</legend>
 		{#if amountsToCheckOut.filter(Boolean).length != 0}
-		{#each pantry.inventory as cartItem, i}
-			{#if amountsToCheckOut[i]}
-				<img src={cartItem.imageURL?.href} alt="" width="50" />
-				<li>{cartItem.name}: {amountsToCheckOut[i]}</li>
-			{/if}
-		{/each}
-		{:else} 
+			{#each pantry.inventory as cartItem, i}
+				{#if amountsToCheckOut[i]}
+					<img src={cartItem.imageURL?.href} alt="" width="50" />
+					<li>{cartItem.name}: {amountsToCheckOut[i]}</li>
+				{/if}
+			{/each}
+		{:else}
 			<p>Nothing in Cart currently!</p>
 		{/if}
-		<input type="submit" value="Check Out">
+		<input type="submit" value="Check Out" />
 	</form>
 	<img bind:this={qrCodeImage} alt="QR code" width="200" />
 </main>

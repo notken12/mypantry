@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
+	import { invalidate, invalidateAll } from '$app/navigation';
 
 	import { fetchAuthed } from '$lib/fetch';
 	import type { Pantry } from '$lib/Pantry';
@@ -24,7 +24,7 @@
 			await fetchAuthed('/pantries', { method: 'POST', body: JSON.stringify({ name, description }) })
 		).json()) as Pantry;
 		invalidate('/pantries');
-		window.location.assign(`/pantries/${pantry._id}`);
+		// window.location.assign(`/pantries/${pantry._id}`);
 	};
 </script>
 
