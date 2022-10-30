@@ -11,6 +11,7 @@
 	let pantries: Pantry[];
 	$: pantries = data.pantries;
 
+
 	let newPantryName: string;
 	let newPantryDescription: string;
 
