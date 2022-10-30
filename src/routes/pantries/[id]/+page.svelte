@@ -49,11 +49,11 @@
 	const deletePantry = async (e: Event) => {
 		e.preventDefault();
 		if (confirmDelete == pantry.name || !pantry.name) {
-			await fetchAuthed(`/pantries/${pantry._id}`, {
+			fetchAuthed(`/pantries/${pantry._id}`, {
 				method: 'DELETE'
+			}).then(() => {
+				window.location.replace('../../dashboard');
 			});
-			invalidateAll();
-			window.location.replace('../../dashboard');
 		} else confirmDelete = '';
 	};
 	let amountsToCheckOut: number[] = [];
@@ -87,13 +87,6 @@
 		{#each pantry.inventory as item, i}
 			<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
 			<li>{item.name}: {item.amount}</li>
-			<input
-				type="number"
-				max={item.amount}
-				min="0"
-				placeholder="Amount to check out"
-				bind:value={amountsToCheckOut[i]}
-			/>
 			<br />
 		{/each}
 	</ul>
@@ -105,20 +98,6 @@
 			<input type="submit" value="New item" />
 		</form>
 	{/if}
-	<form>
-		<legend>Cart</legend>
-		{#if amountsToCheckOut.filter(Boolean).length != 0}
-			{#each pantry.inventory as cartItem, i}
-				{#if amountsToCheckOut[i]}
-					<img src={cartItem.imageURL?.href} alt={cartItem.name + ' item image'} width="50" />
-					<li>{cartItem.name}: {amountsToCheckOut[i]}</li>
-				{/if}
-			{/each}
-		{:else}
-			<p>Nothing in cart currently!</p>
-		{/if}
-		<input type="submit" value="Check Out" />
-	</form>
 	{#if $user?.uid == pantry.owner}
 		<!--this is only for owners-->
 		<form on:submit={() => deletePantry}>
@@ -131,6 +110,7 @@
 			<input type="submit" value="Delete" />
 		</form>
 	{/if}
+	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
 	<div id="share">
 		<h1>Share</h1>
 		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
