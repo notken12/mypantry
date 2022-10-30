@@ -8,29 +8,38 @@ export type Item = {
 	imageURL: URL | null;
 };
 
-export interface Operation {
-	type: string;
+export interface OperationInterface {
+	_id: Id;
+	opType: string;
 	uid: Id | null;
 	data: Record<string, any>;
 	timestamp: Date;
 }
 
-export type EditItems = Operation & {
+export type EditItems = OperationInterface & {
 	uid: Id;
-	type: 'EditItems';
+	opType: 'EditItems';
 	data: {
 		changes: Record<Id, Partial<Item>>;
 	};
 };
-export type NewItem = Operation & {
+export type NewItem = OperationInterface & {
 	uid: Id;
-	type: 'NewItem';
+	opType: 'NewItem';
 	data: {
 		item: Item;
 	};
 };
-export type CheckoutItems = Operation & {
-	type: 'CheckoutItems';
+export type EditInfo = OperationInterface & {
+	uid: Id;
+	opType: 'EditInfo';
+	data: {
+		newInfo: Partial<Pantry>;
+	};
+};
+
+export type CheckoutItems = OperationInterface & {
+	opType: 'CheckoutItems';
 	uid: Id | null;
 	data: {
 		optionalInfo: {
@@ -42,6 +51,8 @@ export type CheckoutItems = Operation & {
 		approved: boolean;
 	};
 };
+
+export type Operation = EditItems | NewItem | CheckoutItems | EditInfo;
 
 export type Pantry = {
 	_id: Id;

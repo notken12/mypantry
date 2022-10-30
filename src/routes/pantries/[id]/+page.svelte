@@ -66,7 +66,15 @@
 		});
 		editorStatus = $user?.uid == pantry.owner; //edit this later for collaborators
 	});
+
+	const opTypes = {
+		NewItem: 'New item',
+		EditItems: 'Edit items',
+		CheckoutItems: 'Checkout items',
+		EditInfo: 'Edit pantry info'
+	};
 </script>
+
 <main>
 	<a href="/dashboard">Back to dashboard</a>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
@@ -85,9 +93,9 @@
 	<h2>Items</h2>
 	<ul>
 		{#each pantry.inventory as item, i}
-      {#if item.imageURL}
-			<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
-    {/if}
+			{#if item.imageURL}
+				<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
+			{/if}
 			<li>{item.name}: {item.amount}</li>
 			<br />
 		{/each}
@@ -112,11 +120,33 @@
 			<input type="submit" value="Delete" />
 		</form>
 	{/if}
+	<div>
+		<h2>History</h2>
+		<ul>
+			{#each pantry.history as op}
+				<li>
+					<p>{opTypes[op.opType]}</p>
+					{#if op.uid}
+						<p>{users[op.uid].displayName}</p>
+					{/if}
+					{#if op.opType === 'NewItem'}
+						<p>{op.data.item.name}</p>
+					{:else if op.opType === 'EditInfo'}
+						<p>Name: {op.data.newInfo.name}</p>
+						<p>Description: {op.data.newInfo.description}</p>
+					{:else}
+						<p>{JSON.stringify(op.data)}</p>
+					{/if}
+					<p>{new Date(op.timestamp).toLocaleString()}</p>
+				</li>
+			{/each}
+		</ul>
+	</div>
 	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
 	<div id="share">
 		<h1>Share</h1>
 		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
-    <b>Scan me to checkout!</b>
+		<b>Scan me to checkout!</b>
 		<img bind:this={qrCodeImage} alt="QR code" width="200" /><a href={qrCodeImage?.src} download
 			>Download QRCode as image</a
 		>

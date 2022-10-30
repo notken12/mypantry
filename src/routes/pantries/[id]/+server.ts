@@ -1,7 +1,8 @@
 import { PantryModel } from '$lib/db';
-import type { Pantry } from '$lib/Pantry';
+import type { EditInfo, Pantry } from '$lib/Pantry';
 import type { RequestHandler } from '@sveltejs/kit';
 import { getUid } from '$lib/firebase-admin';
+import { nanoid } from 'nanoid';
 
 /** Do GET /pantries/[id] to get the pantry with that ID */
 export const GET: RequestHandler = async ({ params }) => {
@@ -22,6 +23,16 @@ export const POST: RequestHandler = async (event) => {
 	if (pantryDoc?.owner !== uid && !pantryDoc?.editors.find((e) => e === uid))
 		return new Response(null, { status: 401 });
 	pantryDoc.set(pantryData);
+	const operation: EditInfo = {
+		_id: nanoid(),
+		opType: 'EditInfo',
+		uid,
+		timestamp: new Date(),
+		data: {
+			newInfo: pantryData
+		}
+	};
+	pantryDoc.history.push(operation);
 	const result = await pantryDoc.save();
 	return new Response(JSON.stringify(result));
 };

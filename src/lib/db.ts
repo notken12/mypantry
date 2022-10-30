@@ -1,13 +1,13 @@
 import { DB_KEY } from '$env/static/private';
 import mongoose, { Schema, model } from 'mongoose';
-import type { Pantry, Item, Operation } from './Pantry';
+import type { Pantry, Item, OperationInterface, Operation } from './Pantry';
 import { nanoid } from 'nanoid';
 
 if (DB_KEY == undefined)
 	throw new Error("Error: couldn't find database key. Add DB_KEY=<database key here> to .env file");
 await mongoose.connect(DB_KEY);
 
-const ItemSchema = new Schema<Item>({
+export const ItemSchema = new Schema<Item>({
 	_id: {
 		type: String,
 		default: () => nanoid()
@@ -26,9 +26,13 @@ const ItemSchema = new Schema<Item>({
 	}
 });
 
-const OperationSchema = new Schema<Operation>(
+export const OperationSchema = new Schema<Operation>(
 	{
-		type: {
+		_id: {
+			type: String,
+			default: nanoid
+		},
+		opType: {
 			type: String,
 			required: true
 		},
