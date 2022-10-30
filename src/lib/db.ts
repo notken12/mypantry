@@ -1,6 +1,6 @@
 import { DB_KEY } from '$env/static/private';
 import mongoose, { Schema, model } from 'mongoose';
-import type { Pantry, Item, OperationInterface, Operation } from './Pantry';
+import type { Pantry, Item, Operation, CheckOutRequest, OperationInterface } from './Pantry';
 import { nanoid } from 'nanoid';
 
 if (DB_KEY == undefined)
@@ -57,4 +57,18 @@ const PantrySchema = new Schema<Pantry>(
 	},
 	{ timestamps: true }
 );
+
+const CheckOutRequestSchema = new Schema<CheckOutRequest>({
+	pantryId: {
+		type: String,
+		default: () => nanoid(11)
+	},
+	firstName: String,
+	lastName: String,
+	additionalRemarks: String,
+	createdDate: {
+		type: Date,
+		default: () => Date.now()
+	}
+});
 export const PantryModel = model<Pantry>('Pantry', PantrySchema);
