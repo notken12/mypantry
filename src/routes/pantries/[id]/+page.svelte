@@ -61,13 +61,12 @@
 	let qrCodeImage: HTMLImageElement;
 	let editorStatus: boolean;
 	onMount(() => {
-		QRCode.toDataURL(window.location.href + '/checkout', (e, url) => {
+		QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
 			qrCodeImage.src = url;
 		});
 		editorStatus = $user?.uid == pantry.owner; //edit this later for collaborators
 	});
 </script>
-
 <main>
 	<a href="/dashboard">Back to dashboard</a>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
@@ -86,7 +85,9 @@
 	<h2>Items</h2>
 	<ul>
 		{#each pantry.inventory as item, i}
+      {#if item.imageURL}
 			<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
+    {/if}
 			<li>{item.name}: {item.amount}</li>
 			<br />
 		{/each}
@@ -114,7 +115,8 @@
 	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
 	<div id="share">
 		<h1>Share</h1>
-		<button on:click={() => navigator.clipboard.writeText(window.location.href + '/checkout')}>Copy link</button>
+		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
+    <b>Scan me to checkout!</b>
 		<img bind:this={qrCodeImage} alt="QR code" width="200" /><a href={qrCodeImage?.src} download
 			>Download QRCode as image</a
 		>
