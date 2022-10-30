@@ -1,14 +1,13 @@
-
 <script lang="ts">
 	import { invalidate, invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
 
 	import { fetchAuthed } from '$lib/fetch';
 
-	import type { Pantry } from '$lib/Pantry';
+	import type { Pantry, Item } from '$lib/Pantry';
 
 	import type { PageData } from './$types';
-	import * as QRCode  from 'qrcode';
+	import * as QRCode from 'qrcode';
 
 	export let data: PageData;
 	export let pantry: Pantry = data.pantry;
@@ -43,7 +42,8 @@
 		invalidateAll();
 	};
 	let confirmDelete = '';
-	const deletePantry = async () => {
+	const deletePantry = async (e: Event) => {
+		e.preventDefault();
 		if (confirmDelete == pantry.name || !pantry.name) {
 			await fetchAuthed(`/pantries/${pantry._id}`, {
 				method: 'DELETE'
@@ -52,15 +52,18 @@
 			window.location.replace('../../dashboard');
 		} else confirmDelete = '';
 	};
-	let qrcodeCanvas: HTMLCanvasElement;
+	let amountsToCheckOut: number[] = [];
+	let qrCodeImage: HTMLImageElement;
 	onMount(() => {
-		QRCode.toCanvas(qrcodeCanvas, window.location.href, console.error);
+		QRCode.toDataURL(window.location.href, (e, url) => {
+			qrCodeImage.src = url;
+		});
 	});
 </script>
 
 <main>
 	<a href="/dashboard">Back to dashboard</a>
-	<form on:submit={deletePantry}>
+	<form on:submit={() => deletePantry}>
 		<legend style="color:red;">Delete Pantry</legend>
 		<input
 			type="text"
@@ -82,14 +85,32 @@
 	</p>
 	<h2>Items</h2>
 	<ul>
-		{#each pantry.inventory as item}
+		{#each pantry.inventory as item, i}
+			<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
 			<li>{item.name}: {item.amount}</li>
+			<input type="number" max="{item.amount}" min="0" placeholder="Amount to check out" bind:value={amountsToCheckOut[i]} />
+			<br>
 		{/each}
 	</ul>
 	<form on:submit={newItem}>
+		<legend>New Item</legend>
 		<input type="text" placeholder="Item name" bind:value={newItemName} />
 		<input type="number" placeholder="Amount" bind:value={amountOfItem} />
 		<input type="submit" value="New item" />
 	</form>
-	<canvas bind:this="{qrcodeCanvas}"></canvas>
+	<form>
+		<legend>Cart</legend>
+		{#if amountsToCheckOut.filter(Boolean).length != 0}
+		{#each pantry.inventory as cartItem, i}
+			{#if amountsToCheckOut[i]}
+				<img src={cartItem.imageURL?.href} alt="" width="50" />
+				<li>{cartItem.name}: {amountsToCheckOut[i]}</li>
+			{/if}
+		{/each}
+		{:else} 
+			<p>Nothing in Cart currently!</p>
+		{/if}
+		<input type="submit" value="Check Out">
+	</form>
+	<img bind:this={qrCodeImage} alt="QR code" width="200" />
 </main>
