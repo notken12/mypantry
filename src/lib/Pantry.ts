@@ -17,3 +17,13 @@ export type Pantry = {
   owner: Id;
   editors: Id[];
 };
+
+export type CheckOutRequest = {
+  pantryId: Id;
+  firstName: string;
+  lastName: string;
+  createdDate: Date;
+  additionalRemarks: string;
+  checkout: Record<Id, number>;
+
+}

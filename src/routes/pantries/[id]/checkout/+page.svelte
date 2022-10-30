@@ -9,6 +9,7 @@
 	let users: Record<Id, UserRecord>;
 	$: users = data.users;
 
+	let search:String;
 	let amounts: Record<Id, number> = {};
 	$: {
 		for (const item of pantry.inventory) {
@@ -22,14 +23,18 @@
 	<h1>Checkout items</h1>
 	<h2>{pantry.name}</h2>
 	<p>{pantry.description}</p>
-	<input type="text" placeholder="Search" />
+	<input type="text" placeholder="Search" bind:value={search}/>
 	<ul>
-		{#each pantry.inventory as item}
+		{#each pantry.inventory.filter(i => {
+				if (!search) return i;
+				return i.name.search(RegExp(`${search}`, 'i')) != -1
+			}
+		) as item,i}
 			<li>
-				<p>{item.name}</p>
-				<input bind:value={amounts[item._id]} type="number" />
-				<button on:click={() => amounts[item._id]++}>Add</button>
-				<button on:click={() => amounts[item._id]--}>Subtract</button>
+				<p>{item.name} ({item.amount} in stock)</p>
+				<input bind:value={amounts[item._id]} min=0 max={item.amount} type="number" />
+				<button on:click={() => amounts[item._id] != item.amount ? amounts[item._id]++ : 0}>Add</button>
+				<button on:click={() => amounts[item._id] != 0 ? amounts[item._id]-- : 0}>Subtract</button>
 			</li>
 		{/each}
 	</ul>
@@ -37,5 +42,5 @@
 	<input type="text" placeholder="First name" />
 	<input type="text" placeholder="Last name" />
 	<input type="text" placeholder="Additional remarks" />
-	<button>Done</button>
+	<button>Send Request</button>
 </main>
