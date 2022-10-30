@@ -85,7 +85,7 @@
 	<p>{pantry.description ?? 'No description provided'}</p>
 	<p>
 		Owner: {users[pantry.owner]?.displayName}<br />
-		Collaborators: LATER my gosh ken can you do this
+		Collaborators: soon
 	</p>
 
 	{#if editorStatus}
@@ -125,7 +125,6 @@
 		<button on:click={newItemModal.open}>Add New Item</button>
 		<Modal title="New Item" bind:this={newItemModal}>
 			<form on:submit={newItem}>
-				<legend>New Item</legend>
 				<input type="file" name="Image" accept="image/*" />
 				<input type="text" placeholder="Item name" bind:value={newItemName} />
 				<input type="number" placeholder="Amount" bind:value={amountOfItem} />
@@ -133,7 +132,7 @@
 			</form>
 		</Modal>
 	{/if}
-	<div>
+	<div style="overflow-y:scroll;height:200px;overflow-x:hidden;">
 		<h2>History</h2>
 		<ul>
 			{#each pantry.history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as op}

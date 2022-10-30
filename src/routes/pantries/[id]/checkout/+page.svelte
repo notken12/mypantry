@@ -3,6 +3,7 @@
 	import type { CheckoutData, Id, Pantry } from '$lib/Pantry';
 	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 	import type { PageData } from './$types';
+	import Modal from '$lib/Modal.svelte';
 
 	export let data: PageData;
 	let pantry: Pantry;
@@ -62,5 +63,5 @@
 	<input type="text" placeholder="First name" bind:value={optionalInfo.firstName} />
 	<input type="text" placeholder="Last name" bind:value={optionalInfo.lastName} />
 	<input type="text" placeholder="Additional remarks" bind:value={optionalInfo.additionalRemarks} />
-	<button on:click={postCheckout}>Send Among Us Sussy Balls</button>
+	<button on:click={postCheckout}>Send Request</button>
 </main>
