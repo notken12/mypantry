@@ -27,3 +27,20 @@
 		</div>
 	</div>
 {/if}
+<style>
+	.bg {
+		position:fixed;
+		top:0;
+		left:0;
+		width:100vw;
+		height:100vh;
+		background:#000000aa;
+	}
+	.wrapper {
+		background:black;
+		position:fixed;
+		top:25vw;
+		left:25vh;
+		width:25vw;
+	}
+</style>
