@@ -123,7 +123,7 @@
 	<div>
 		<h2>History</h2>
 		<ul>
-			{#each pantry.history as op}
+			{#each pantry.history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as op}
 				<li>
 					<p>{opTypes[op.opType]}</p>
 					{#if op.uid}
@@ -136,8 +136,10 @@
 						<p>Description: {op.data.newInfo.description}</p>
 					{:else if op.opType === 'CheckoutItems'}
 						<div>
-							<p>Request by {op.data.optionalInfo.firstName} {op.data.optionalInfo.lastName}</p>
-							<p>Additional Remarks: {op.data.optionalInfo.additionalRemarks}</p>
+							{#if op.data.optionalInfo}
+								<p>Request by {op.data.optionalInfo?.firstName} {op.data.optionalInfo?.lastName}</p>
+								<p>Additional Remarks: {op.data.optionalInfo?.additionalRemarks}</p>
+							{/if}
 						</div>
 						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
 						<ul>

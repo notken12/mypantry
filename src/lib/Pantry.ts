@@ -65,6 +65,7 @@ export type Pantry = {
 	owner: Id;
 	editors: Id[];
 	history: Operation[];
+	location: GeolocationPosition;
 };
 
 export type CheckOutRequest = {
