@@ -11,6 +11,7 @@
 	import type { PageData } from './$types';
 	import * as QRCode from 'qrcode';
 	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 	let pantry: Pantry;
@@ -64,10 +65,16 @@
 	let pantryInfoModal: Modal;
 	let newItemModal: Modal;
 	let shareModal: Modal;
+	let addCollaboratorsModal: Modal;
+
+	$: {
+		if (browser && qrCodeImage)
+			QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
+				qrCodeImage.src = url;
+			});
+	}
+
 	onMount(() => {
-		/*QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
-			qrCodeImage.src = url;
-		});*/
 		editorStatus = $user?.uid == pantry.owner; //edit this later for collaborators
 	});
 
@@ -89,6 +96,7 @@
 	</p>
 
 	{#if editorStatus}
+		<button on:click={addCollaboratorsModal.open}> Add collaborators </button>
 		<button on:click={pantryInfoModal.open}>Edit Pantry Info</button>
 		<Modal title="Edit Pantry Info" bind:this={pantryInfoModal}>
 			<form on:submit={editPantryDesc}>
@@ -109,6 +117,10 @@
 					<input type="submit" value="Delete" />
 				</form>
 			{/if}
+		</Modal>
+		<Modal title="Add collaborators" bind:this={addCollaboratorsModal}>
+			<input type="email" placeholder="Email" />
+			<button>Add</button>
 		</Modal>
 	{/if}
 	<h2>Items</h2>
@@ -170,11 +182,11 @@
 		</ul>
 	</div>
 	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
-	<!--<button on:click={shareModal.open}>Share Checkout Page</button>
+	<button on:click={shareModal.open}>Share Checkout Page</button>
 	<Modal title="Share" bind:this={shareModal}>
 		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
 		<b>Scan me to checkout!</b>
 		<img bind:this={qrCodeImage} alt="QR code" width="200" />
 		<a href={qrCodeImage?.src} download>Download QRCode as image</a>
-	</Modal>-->
+	</Modal>
 </main>
