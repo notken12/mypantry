@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { invalidate, invalidateAll } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import Modal from '$lib/Modal.svelte';
 
 	import { fetchAuthed } from '$lib/fetch';
 
@@ -60,10 +61,13 @@
 	let amountsToCheckOut: number[] = [];
 	let qrCodeImage: HTMLImageElement;
 	let editorStatus: boolean;
+	let pantryInfoModal: Modal;
+	let newItemModal: Modal;
+	let shareModal: Modal;
 	onMount(() => {
-		QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
+		/*QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
 			qrCodeImage.src = url;
-		});
+		});*/
 		editorStatus = $user?.uid == pantry.owner; //edit this later for collaborators
 	});
 
@@ -79,17 +83,34 @@
 	<a href="/dashboard">Back to dashboard</a>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
 	<p>{pantry.description ?? 'No description provided'}</p>
-	{#if editorStatus}
-		<form on:submit={editPantryDesc}>
-			<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
-			<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
-			<input type="submit" value="Change" />
-		</form>
-	{/if}
 	<p>
 		Owner: {users[pantry.owner]?.displayName}<br />
 		Collaborators: LATER my gosh ken can you do this
 	</p>
+
+	{#if editorStatus}
+		<button on:click={pantryInfoModal.open}>Edit Pantry Info</button>
+		<Modal title="Edit Pantry Info" bind:this={pantryInfoModal}>
+			<form on:submit={editPantryDesc}>
+				<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
+				<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
+				<input type="submit" value="Change" />
+			</form>
+
+			{#if $user?.uid == pantry.owner}
+				<!--this is only for owners-->
+				<form on:submit={() => deletePantry}>
+					<legend style="color:red;">Delete Pantry</legend>
+					<input
+						type="text"
+						placeholder="Type the name of this pantry to delete it"
+						bind:value={confirmDelete}
+					/>
+					<input type="submit" value="Delete" />
+				</form>
+			{/if}
+		</Modal>
+	{/if}
 	<h2>Items</h2>
 	<ul>
 		{#each pantry.inventory as item, i}
@@ -101,24 +122,16 @@
 		{/each}
 	</ul>
 	{#if editorStatus}
-		<form on:submit={newItem}>
-			<legend>New Item</legend>
-			<input type="text" placeholder="Item name" bind:value={newItemName} />
-			<input type="number" placeholder="Amount" bind:value={amountOfItem} />
-			<input type="submit" value="New item" />
-		</form>
-	{/if}
-	{#if $user?.uid == pantry.owner}
-		<!--this is only for owners-->
-		<form on:submit={() => deletePantry}>
-			<legend style="color:red;">Delete Pantry</legend>
-			<input
-				type="text"
-				placeholder="Type the name of this pantry to delete it"
-				bind:value={confirmDelete}
-			/>
-			<input type="submit" value="Delete" />
-		</form>
+		<button on:click={newItemModal.open}>Add New Item</button>
+		<Modal title="New Item" bind:this={newItemModal}>
+			<form on:submit={newItem}>
+				<legend>New Item</legend>
+				<input type="file" name="Image" accept="image/*" />
+				<input type="text" placeholder="Item name" bind:value={newItemName} />
+				<input type="number" placeholder="Amount" bind:value={amountOfItem} />
+				<input type="submit" value="New item" />
+			</form>
+		</Modal>
 	{/if}
 	<div>
 		<h2>History</h2>
@@ -158,12 +171,11 @@
 		</ul>
 	</div>
 	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
-	<div id="share">
-		<h1>Share</h1>
+	<!--<button on:click={shareModal.open}>Share Checkout Page</button>
+	<Modal title="Share" bind:this={shareModal}>
 		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
 		<b>Scan me to checkout!</b>
-		<img bind:this={qrCodeImage} alt="QR code" width="200" /><a href={qrCodeImage?.src} download
-			>Download QRCode as image</a
-		>
-	</div>
+		<img bind:this={qrCodeImage} alt="QR code" width="200" />
+		<a href={qrCodeImage?.src} download>Download QRCode as image</a>
+	</Modal>-->
 </main>

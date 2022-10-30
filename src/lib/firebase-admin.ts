@@ -13,12 +13,14 @@ export const app = initializeApp({
 });
 export const auth = admin.auth();
 
-export const getUid = async (event: RequestEvent) => {
+export const getUid = async (event: RequestEvent): Promise<Id | null> => {
   const idToken =
     event.request.headers.get('firebaseIdToken') ?? event.cookies.get('firebaseIdToken');
   if (!idToken) return null;
   const token = await auth.verifyIdToken(idToken).catch(console.error);
-  return token?.uid;
+  if (token)
+    return token.uid;
+  return null
 };
 
 export const getUsers = async (uids: Id[]) => {
