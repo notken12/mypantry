@@ -29,7 +29,8 @@
 			method: 'POST',
 			body: JSON.stringify({ name, amount })
 		});
-		invalidate(`.`);
+		// invalidate(`.`);
+		invalidateAll();
 	};
 	let newPantryName = '';
 	let newPantryDesc = '';

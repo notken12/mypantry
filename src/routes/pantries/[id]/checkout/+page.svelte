@@ -21,6 +21,8 @@
 	<a href=".">Back</a>
 	<h1>Checkout items</h1>
 	<h2>{pantry.name}</h2>
+	<p>{pantry.description}</p>
+	<input type="text" placeholder="Search" />
 	<ul>
 		{#each pantry.inventory as item}
 			<li>
@@ -31,5 +33,9 @@
 			</li>
 		{/each}
 	</ul>
+	<p>Optional: tell us a bit about yourself?</p>
+	<input type="text" placeholder="First name" />
+	<input type="text" placeholder="Last name" />
+	<input type="text" placeholder="Additional remarks" />
 	<button>Done</button>
 </main>
