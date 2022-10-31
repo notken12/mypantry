@@ -4,7 +4,7 @@
 
 	import { fetchAuthed } from '$lib/fetch';
 
-	import type { Pantry, Operation } from '$lib/Pantry';
+	import type { Pantry, Item, Operation, ApproveCheckout, CheckoutData } from '$lib/Pantry';
 	import { user } from '$lib/stores';
 
 	import type { PageData } from './$types';
@@ -100,12 +100,20 @@
 		});
 		invalidateAll();
 	};
-	const approveCheckout = async (e: Event, op: Operation) => {
-		let newData = op.data;
+	const approveCheckout = async (e: Event, data: CheckoutData) => {
+		let newData = data;
 		newData.approved = true;
+		let checkoutAmounts = newData.itemAmounts;
+		pantry.inventory.forEach(v => v.amount -= checkoutAmounts[v._id]);
+
 		await fetchAuthed(window.location.href + '/checkout/approve', {
 			method: 'POST',
 			body: JSON.stringify(newData)
+		});
+		
+		await fetchAuthed(`/pantries/${pantry._id}`, {
+			method: 'POST',
+			body: JSON.stringify({ inventory: pantry.inventory})
 		});
 	};
 </script>
@@ -188,12 +196,12 @@
 			</form>
 		</Modal>
 	{/if}
-	<div style="overflow-y:scroll;height:200px;overflow-x:hidden;">
+	<div style="overflow-y:auto;height:200px;overflow-x:hidden;">
 		<h2>History</h2>
 		<ul>
 			{#each pantry.history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as op}
 				<li>
-					<p>{opTypes[op.opType]}</p>
+					<h4>{opTypes[op.opType]}</h4>
 					{#if op.uid}
 						<p>{users[op.uid].displayName}</p>
 					{/if}
@@ -210,7 +218,9 @@
 							{/if}
 						</div>
 						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
-						{#if editorStatus}<button on:click={(e) => approveCheckout(e, op)} />{/if}
+						{#if editorStatus}<button on:click={(e) => approveCheckout(e, op.data)}>
+								Approve Request</button
+							>{/if}
 						<ul>
 							{#each Object.entries(op.data.itemAmounts) as [id, amount]}
 								<li>
@@ -226,10 +236,25 @@
 								</li>
 							{/each}
 						</ul>
+					{:else if op.opType === 'ApproveCheckout'}
+						<div>
+							{#if op.data.checkoutData.optionalInfo}
+								<p>
+									Request by {op.data.checkoutData.optionalInfo?.firstName}
+									{op.data.checkoutData.optionalInfo?.lastName}
+								</p>
+								<p>Additional Remarks: {op.data.checkoutData.optionalInfo?.additionalRemarks}</p>
+							{/if}
+						</div>
+						<ul>
+							{#each Object.entries(op.data.checkoutData.itemAmounts) as [id, amount]}
+								<li>{pantry.inventory.find((i) => i._id === id)?.name}: {amount}</li>
+							{/each}
+						</ul>
 					{:else}
 						<p>Cannot display, raw data: {JSON.stringify(op.data)}</p>
 					{/if}
-					<p>{new Date(op.timestamp).toLocaleString()}</p>
+					<small><code>{new Date(op.timestamp).toLocaleString()}</code></small>
 				</li>
 			{/each}
 		</ul>
