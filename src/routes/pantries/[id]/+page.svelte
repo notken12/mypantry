@@ -13,6 +13,7 @@
 	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 	import { browser } from '$app/environment';
 	import type { AddEditorRequest } from './editors/types';
+	import BackLink from '$lib/BackLink.svelte';
 
 	export let data: PageData;
 	let pantry: Pantry;
@@ -112,8 +113,10 @@
 </script>
 
 <main>
-	<a href="/dashboard">Back to dashboard</a>
-	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
+	<header>
+		<BackLink href="/dashboard" />
+		<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
+	</header>
 	<p>{pantry.description ?? 'No description provided'}</p>
 	<p>Collaborators:</p>
 	<ul>

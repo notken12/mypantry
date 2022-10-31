@@ -7,6 +7,17 @@
 }
 
 :root {
+	/* --incomplete: #d8616b; */
+	--incomplete: transparent;
+	--completed: #98bb6c;
+	margin: 0;
+	min-width: 100%;
+	min-height: 100%;
+	max-height: 100%;
+	display: flex;
+}
+
+:root {
 	--darker-black: #191922;
 	--base00: #1f1f28;
 	--base01: #2a2a37;
@@ -24,14 +35,6 @@
 	--base0D: #7e9cd8;
 	--base0E: #9c86bf;
 	--base0F: #d8616b;
-	/* --incomplete: #d8616b; */
-	--incomplete: transparent;
-	--completed: #98bb6c;
-	margin: 0;
-	min-width: 100%;
-	min-height: 100%;
-	max-height: 100%;
-	display: flex;
 }
 
 :root {
@@ -52,6 +55,26 @@
 	--base00: #1e2122;
 	--base09: #e78a4e;
 	--base06: #c3b499;
+}
+
+:root {
+	--darker_black: #f5efde;
+	--base00: #fff9e8;
+	--base01: #f6f0df;
+	--base02: #ede7d6;
+	--base03: #e5dfce;
+	--base04: #ddd7c6;
+	--base05: #495157;
+	--base06: #3b4349;
+	--base07: #272f35;
+	--base08: #5f9b93;
+	--base09: #b67996;
+	--base0A: #8da101;
+	--base0B: #d59600;
+	--base0C: #ef615e;
+	--base0D: #87a060;
+	--base0E: #c85552;
+	--base0F: #c85552;
 }
 
 body {
@@ -102,8 +125,13 @@ main {
 }
 
 h1 {
-	font-size: 26px;
-	font-weight: 700;
+	/* font-weight: normal; */
+	font-size: 17px;
+	background: var(--base0B);
+	color: var(--base00);
+	padding: 2px 6px;
+	padding: 8px 10px;
+	line-height: 17px;
 }
 
 h2 {
@@ -164,7 +192,9 @@ table {
 	}
 }
 
-button {
+button,
+input[type='submit'] {
+	font-family: 'Space Mono';
 	transition: background-color 0.2s;
 	/* background: var(--base01); */
 	background: var(--base01);
@@ -208,6 +238,7 @@ input:hover {
 }
 
 a {
+	font-family: 'Space Mono';
 	color: var(--base0D);
 }
 
@@ -226,4 +257,9 @@ ul {
 	flex-direction: column;
 	gap: 8px;
 	margin: 0;
+}
+
+header {
+	display: flex;
+	gap: 16px;
 }
