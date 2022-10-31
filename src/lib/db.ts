@@ -1,11 +1,10 @@
 import { DB_KEY } from '$env/static/private';
 import mongoose, { Schema, model } from 'mongoose';
-import {
-  type Pantry,
-  type Item,
-  type Operation,
-  type CheckOutRequest,
-  type OperationInterface,
+import type {
+  Pantry,
+  Item,
+  Operation,
+  OperationInterface,
   Editor
 } from './Pantry';
 import { nanoid } from 'nanoid';
