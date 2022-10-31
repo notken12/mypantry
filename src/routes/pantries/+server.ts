@@ -11,7 +11,11 @@ export const getAllPantries = async () => {
 export const getUserPantries = async (uid: Id) => {
   const user = await auth.getUser(uid);
   return await PantryModel.find({
-    $or: [{ owner: uid }, { editors: { uid: uid, email: user.email } }]
+    // $or: [{ owner: uid }, { editors: { uid: uid, email: user.email } }],
+    $or: [
+      { editors: { $elemMatch: { uid: uid } } },
+      { editors: { $elemMatch: { email: user.email } } }
+    ]
   });
 };
 

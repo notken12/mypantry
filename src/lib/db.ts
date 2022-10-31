@@ -49,15 +49,18 @@ export const OperationSchema = new Schema<Operation>(
   { timestamps: { createdAt: 'timestamp' } }
 );
 
-export const EditorSchema = new Schema<Editor>({
-  email: {
-    type: String,
-    required: true
+export const EditorSchema = new Schema<Editor>(
+  {
+    email: {
+      type: String,
+      required: true
+    },
+    uid: {
+      type: String
+    }
   },
-  uid: {
-    type: String
-  }
-});
+  { id: false }
+);
 
 const PantrySchema = new Schema<Pantry>(
   {
