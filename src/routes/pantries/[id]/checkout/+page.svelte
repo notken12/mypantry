@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { fetchAuthed } from '$lib/fetch';
+	import Header from '$lib/Header.svelte';
 	import type { CheckoutData, Id, Pantry } from '$lib/Pantry';
 	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 	import type { PageData } from './$types';
@@ -38,8 +39,7 @@
 </script>
 
 <main>
-	<a href=".">Back</a>
-	<h1>Checkout items</h1>
+	<Header href=".">Checkout items</Header>
 	<h2>{pantry.name}</h2>
 	<p>{pantry.description}</p>
 	<input type="text" placeholder="Search" bind:value={search} />

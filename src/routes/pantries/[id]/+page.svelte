@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { invalidate, invalidateAll } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 	import Modal from '$lib/Modal.svelte';
 
 	import { fetchAuthed } from '$lib/fetch';
 
-	import type { Pantry, Item, Operation } from '$lib/Pantry';
+	import type { Pantry, Operation } from '$lib/Pantry';
 	import { user } from '$lib/stores';
 
 	import type { PageData } from './$types';
@@ -13,7 +12,7 @@
 	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 	import { browser } from '$app/environment';
 	import type { AddEditorRequest } from './editors/types';
-	import BackLink from '$lib/BackLink.svelte';
+	import Header from '$lib/Header.svelte';
 
 	export let data: PageData;
 	let pantry: Pantry;
@@ -61,7 +60,6 @@
 			});
 		} else confirmDelete = '';
 	};
-	let amountsToCheckOut: number[] = [];
 	let qrCodeImage: HTMLImageElement;
 	$: editorStatus = pantry.editors.find((e) => e.uid === $user?.uid || e.email === $user?.email);
 	let pantryInfoModal: Modal;
@@ -113,10 +111,7 @@
 </script>
 
 <main>
-	<header>
-		<BackLink href="/dashboard" />
-		<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
-	</header>
+	<Header href="/dashboard">{pantry.name ?? 'Unnamed pantry'}</Header>
 	<p>{pantry.description ?? 'No description provided'}</p>
 	<p>Collaborators:</p>
 	<ul>

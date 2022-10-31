@@ -1,5 +1,5 @@
 import { PantryModel } from '$lib/db';
-import { getUsers } from '$lib/firebase-admin';
+import { getUid, getUsers } from '$lib/firebase-admin';
 import type { Id, Pantry } from '$lib/Pantry';
 import { error } from '@sveltejs/kit';
 import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
@@ -11,13 +11,16 @@ export const load: PageServerLoad = async (event) => {
 
   const pantry = await PantryModel.findById(event.params.id);
   if (!pantry) throw error(404, 'pantry not found');
-  const usersToGet = [pantry.owner];
-  for (const editor of pantry.editors) {
-    if (editor.uid) usersToGet.push(editor.uid);
-  }
-  const users = await getUsers(usersToGet);
+
+  // const uid = await getUid(event);
+  // const usersToGet = [pantry.owner];
+  // if (uid != null) usersToGet.push(uid);
+  // for (const editor of pantry.editors) {
+  //   if (editor.uid) usersToGet.push(editor.uid);
+  // }
+  // const users = await getUsers(usersToGet);
   return {
-    pantry: JSON.parse(JSON.stringify(pantry)) as Pantry,
-    users: JSON.parse(JSON.stringify(users)) as Record<Id, UserRecord>
+    pantry: JSON.parse(JSON.stringify(pantry)) as Pantry
+    // users: JSON.parse(JSON.stringify(users)) as Record<Id, UserRecord>
   };
 };

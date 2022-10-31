@@ -24,8 +24,15 @@ export const getUid = async (event: RequestEvent): Promise<Id | null> => {
 
 export const getUsers = async (uids: Id[]) => {
   const users: Record<Id, UserRecord> = {};
-  for (const uid of uids) {
-    users[uid] = await auth.getUser(uid);
+  const fetchedUsers = await auth.getUsers(
+    uids.map((uid) => {
+      return {
+        uid
+      };
+    })
+  );
+  for (const user of fetchedUsers.users) {
+    users[user.uid] = user;
   }
   return users;
 };
