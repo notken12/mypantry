@@ -1,4 +1,7 @@
+<script lang="ts">
+	import Header from '$lib/Header.svelte';
+</script>
+
 <main>
-	<a href="../">Home</a>
-	<h1>We are mogo industies</h1>
+	<Header href="../">About Us</Header>
 </main>

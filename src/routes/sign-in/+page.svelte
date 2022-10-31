@@ -3,6 +3,7 @@
 
 	import { auth } from '$lib/firebase';
 	import { user } from '$lib/stores';
+	import Header from '$lib/Header.svelte';
 	const provider = new GoogleAuthProvider();
 
 	$: signInText = $user ? `Signed in as ${$user?.displayName}` : 'Not signed in';
@@ -19,7 +20,7 @@
 </script>
 
 <main>
-	<a href="../">Home</a>
+	<Header href="../">Sign in</Header>
+	<p>{signInText}</p>
 	<button on:click={signInWithGoogle}>Sign in with Google</button>
-	<h2>{signInText}</h2>
 </main>
