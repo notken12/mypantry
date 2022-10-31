@@ -12,15 +12,19 @@ export const load: LayoutServerLoad = async (event) => {
   event.depends(`/pantries/${event.params.id}`);
   event.depends(`/pantries/${event.params.id}/inventory`);
 
-  const uid = await getUid(event);
   const pantry = await PantryModel.findById(event.params.id);
   if (!pantry) throw error(404, 'pantry not found');
-  const user = await auth.getUser(uid);
+  const uid = await getUid(event);
+  const user = await auth.getUser(uid).catch((_) => {
+    // do nothing
+  });
+  let serializeUser: object = user as object;
+  if (user) serializeUser = user.toJSON();
   // clientAuth.updateCurrentUser(user);
 
   return {
     pantry: JSON.parse(JSON.stringify(pantry)) as Pantry,
-    user: user.toJSON() as UserRecord
+    user: serializeUser as UserRecord
     // users: JSON.parse(JSON.stringify(users)) as Record<Id, UserRecord>
   };
 

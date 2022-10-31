@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { idToken, loaded, user } from '$lib/stores';
-	import { onAuthStateChanged, type User } from 'firebase/auth';
+	import { onAuthStateChanged } from 'firebase/auth';
 	import Cookies from 'js-cookie';
 	import { auth } from '$lib/firebase';
 	import type { LayoutData } from './$types';
