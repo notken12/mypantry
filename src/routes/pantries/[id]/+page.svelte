@@ -100,20 +100,15 @@
 		});
 		invalidateAll();
 	};
-	const approveCheckout = async (e: Event, data: CheckoutData) => {
+	const approveCheckout = async (e: Event, data: any) => {
 		let newData = data;
 		newData.approved = true;
 		let checkoutAmounts = newData.itemAmounts;
 		pantry.inventory.forEach(v => v.amount -= checkoutAmounts[v._id]);
-
+		console.log(JSON.stringify(pantry.inventory))
 		await fetchAuthed(window.location.href + '/checkout/approve', {
 			method: 'POST',
-			body: JSON.stringify(newData)
-		});
-		
-		await fetchAuthed(`/pantries/${pantry._id}`, {
-			method: 'POST',
-			body: JSON.stringify({ inventory: pantry.inventory})
+			body: JSON.stringify({newData:newData, inventory: pantry.inventory})
 		});
 	};
 </script>
