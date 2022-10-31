@@ -101,14 +101,14 @@
 		});
 		invalidateAll();
 	};
-	const approveCheckout = async (e:Event, op:Operation) => {
+	const approveCheckout = async (e: Event, op: Operation) => {
 		let newData = op.data;
 		newData.approved = true;
 		await fetchAuthed(window.location.href + '/checkout/approve', {
 			method: 'POST',
 			body: JSON.stringify(newData)
 		});
-	}
+	};
 </script>
 
 <main>
@@ -125,6 +125,14 @@
 			</li>
 		{/each}
 	</ul>
+	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
+	<button on:click={shareModal.open}>Share Checkout Page</button>
+	<Modal title="Share" bind:this={shareModal}>
+		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
+		<b>Scan me to checkout!</b>
+		<img bind:this={qrCodeImage} alt="QR code" width="200" />
+		<a href={qrCodeImage?.src} download>Download QRCode as image</a>
+	</Modal>
 
 	{#if editorStatus}
 		<button on:click={addCollaboratorsModal.open}> Add collaborators </button>
@@ -204,7 +212,7 @@
 							{/if}
 						</div>
 						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
-						{#if editorStatus}<button on:click={e=>approveCheckout(e, op)}></button>{/if}
+						{#if editorStatus}<button on:click={(e) => approveCheckout(e, op)} />{/if}
 						<ul>
 							{#each Object.entries(op.data.itemAmounts) as [id, amount]}
 								<li>
@@ -228,12 +236,4 @@
 			{/each}
 		</ul>
 	</div>
-	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
-	<button on:click={shareModal.open}>Share Checkout Page</button>
-	<Modal title="Share" bind:this={shareModal}>
-		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
-		<b>Scan me to checkout!</b>
-		<img bind:this={qrCodeImage} alt="QR code" width="200" />
-		<a href={qrCodeImage?.src} download>Download QRCode as image</a>
-	</Modal>
 </main>

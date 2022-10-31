@@ -164,33 +164,32 @@ table {
 button {
 	transition: background-color 0.2s;
 	/* background: var(--base01); */
-	background: none;
+	background: var(--base01);
 	border: none;
 	font-size: 17px;
 	padding: 8px 10px;
-	border-radius: 6px;
+	border-radius: 0px;
 	cursor: pointer;
 	color: var(--base0D);
 	/* font-family: 'Space Mono', monospace; */
 	/* font-size: 16px; */
 	line-height: 17px;
-	display: flex;
-	border: var(--base03) 1px solid;
+	/* border: var(--base03) 1px solid; */
 }
 
 button:hover {
-	background: var(--base01);
+	background: var(--base02);
 }
 
 button:active {
-	background: var(--base04);
+	background: var(--base03);
 }
 
 input {
 	padding: 8px !important;
 	margin: 0 !important;
 	background: var(--base01);
-	border-radius: 6px;
+	border-radius: 0px;
 	border: none;
 	outline: none;
 	font-size: 17px !important;

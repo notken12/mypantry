@@ -12,7 +12,7 @@ export interface OperationInterface {
   _id: Id;
   opType: string;
   uid: Id | null;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   timestamp: Date;
 }
 
@@ -57,7 +57,7 @@ export type CheckoutItems = OperationInterface & {
 export type ApproveCheckout = OperationInterface & {
   opType: 'ApproveCheckout';
   uid: Id | null;
-  data: {checkoutData:CheckoutData, approvalStatus: boolean};
+  data: { checkoutData: CheckoutData; approvalStatus: boolean };
 };
 
 export type AddEditors = OperationInterface & {
@@ -68,7 +68,13 @@ export type AddEditors = OperationInterface & {
   };
 };
 
-export type Operation = EditItems | NewItem | CheckoutItems | EditInfo | AddEditors | ApproveCheckout;
+export type Operation =
+  | EditItems
+  | NewItem
+  | CheckoutItems
+  | EditInfo
+  | AddEditors
+  | ApproveCheckout;
 
 export type Editor = { uid: Id | null; email: string };
 

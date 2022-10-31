@@ -23,7 +23,9 @@
 				<h1>{title}</h1>
 				<button on:click={done}>Done</button>
 			</header>
-			<slot />
+			<div class="main">
+				<slot />
+			</div>
 		</div>
 	</div>
 {/if}
@@ -36,34 +38,46 @@
 		width: 100%;
 		height: 100%;
 		background: #00000066;
-		/* backdrop-filter: blur(6px); */
+		backdrop-filter: blur(8px);
 		display: flex;
-		padding-top: 16px;
+		/* padding-top: 16px; */
+		padding: 16px;
 	}
 
 	header {
 		display: flex;
+		padding: 16px;
 		justify-content: space-between;
 	}
 
 	h1 {
 		font-weight: normal;
 		font-size: 17px;
+		background: var(--base0B);
+		color: var(--base00);
+		padding: 2px 6px;
+		padding: 8px 10px;
+		line-height: 17px;
 	}
 
 	button {
 		border: none;
-		margin: -8px -6px;
+		/* margin: -8px -6px; */
 		align-self: center;
 	}
 	.wrapper {
 		background: var(--base00);
-		position: fixed;
 		display: flex;
 		flex-direction: column;
-		width: 100%;
-		min-height: 100%;
+		flex: 1;
+		/* border-radius: 8px 8px 0 0; */
+	}
+
+	.main {
 		padding: 16px;
-		border-radius: 8px 8px 0 0;
+		padding-top: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
 	}
 </style>
