@@ -5,7 +5,7 @@
 
 	import { fetchAuthed } from '$lib/fetch';
 
-	import type { Pantry, Item } from '$lib/Pantry';
+	import type { Pantry, Item, Operation } from '$lib/Pantry';
 	import { user } from '$lib/stores';
 
 	import type { PageData } from './$types';
@@ -80,7 +80,8 @@
 		EditItems: 'Edit items',
 		CheckoutItems: 'Checkout items',
 		EditInfo: 'Edit pantry info',
-		AddEditors: 'Add collaborators'
+		AddEditors: 'Add collaborators',
+		ApproveCheckout: 'Approve Checkout'
 	};
 
 	let editorsToAdd: { email: string }[] = [];
@@ -100,6 +101,14 @@
 		});
 		invalidateAll();
 	};
+	const approveCheckout = async (e:Event, op:Operation) => {
+		let newData = op.data;
+		newData.approved = true;
+		await fetchAuthed(window.location.href + '/checkout/approve', {
+			method: 'POST',
+			body: JSON.stringify(newData)
+		});
+	}
 </script>
 
 <main>
@@ -195,6 +204,7 @@
 							{/if}
 						</div>
 						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
+						{#if editorStatus}<button on:click={e=>approveCheckout(e, op)}></button>{/if}
 						<ul>
 							{#each Object.entries(op.data.itemAmounts) as [id, amount]}
 								<li>

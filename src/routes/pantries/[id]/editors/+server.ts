@@ -13,7 +13,8 @@ export const POST: RequestHandler = async (event) => {
 
   const pantryDoc = await PantryModel.findById(params.id);
   // Must have editor access to pantry
-  if (pantryDoc?.owner !== uid && !pantryDoc?.editors.find((e) => e === uid))
+  let email = (await auth.getUser(uid)).email;
+  if (pantryDoc?.owner !== uid && !pantryDoc?.editors.find(e => e.uid === uid || e.email === email))
     return new Response(null, { status: 401 });
 
   const reqData = (await request.json()) as AddEditorRequest;
