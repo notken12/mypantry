@@ -62,7 +62,7 @@
 	};
 	let amountsToCheckOut: number[] = [];
 	let qrCodeImage: HTMLImageElement;
-	let editorStatus: boolean;
+	$: editorStatus = pantry.editors.find((e) => e.uid === $user?.uid || e.email === $user?.email);
 	let pantryInfoModal: Modal;
 	let newItemModal: Modal;
 	let shareModal: Modal;
@@ -74,10 +74,6 @@
 				qrCodeImage.src = url;
 			});
 	}
-
-	onMount(() => {
-		editorStatus = $user?.uid == pantry.owner; //edit this later for collaborators
-	});
 
 	const opTypes = {
 		NewItem: 'New item',
