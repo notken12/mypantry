@@ -12,6 +12,7 @@
 	import * as QRCode from 'qrcode';
 	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 	import { browser } from '$app/environment';
+	import type { AddEditorRequest } from './editors/types';
 
 	export let data: PageData;
 	let pantry: Pantry;
@@ -82,7 +83,26 @@
 		NewItem: 'New item',
 		EditItems: 'Edit items',
 		CheckoutItems: 'Checkout items',
-		EditInfo: 'Edit pantry info'
+		EditInfo: 'Edit pantry info',
+		AddEditors: 'Add collaborators'
+	};
+
+	let editorsToAdd: { email: string }[] = [];
+	let editorInput: HTMLInputElement;
+	const addEditorEmail = async () => {
+		if (editorInput.checkValidity()) editorsToAdd.push({ email: editorInput.value });
+		editorsToAdd = editorsToAdd;
+		console.log(editorsToAdd);
+	};
+
+	const submitAddEditors = async () => {
+		if (editorsToAdd.length === 0) return;
+		const req: AddEditorRequest = { editorsToAdd };
+		await fetchAuthed(window.location.href + '/editors', {
+			method: 'POST',
+			body: JSON.stringify(req)
+		});
+		invalidateAll();
 	};
 </script>
 
@@ -90,10 +110,16 @@
 	<a href="/dashboard">Back to dashboard</a>
 	<h1>{pantry.name ?? 'Unnamed pantry'}</h1>
 	<p>{pantry.description ?? 'No description provided'}</p>
-	<p>
-		Owner: {users[pantry.owner]?.displayName}<br />
-		Collaborators: soon
-	</p>
+	<p>Collaborators:</p>
+	<ul>
+		{#each pantry.editors as editor}
+			<li>
+				{editor.email}{editor.uid != null
+					? ` (${users[editor.uid]?.displayName})`
+					: ''}{pantry.owner === editor.uid ? ' (Owner)' : ''}
+			</li>
+		{/each}
+	</ul>
 
 	{#if editorStatus}
 		<button on:click={addCollaboratorsModal.open}> Add collaborators </button>
@@ -118,9 +144,16 @@
 				</form>
 			{/if}
 		</Modal>
-		<Modal title="Add collaborators" bind:this={addCollaboratorsModal}>
-			<input type="email" placeholder="Email" />
-			<button>Add</button>
+		<Modal title="Add collaborators" bind:this={addCollaboratorsModal} on:done={submitAddEditors}>
+			<ul>
+				{#each editorsToAdd as editor}
+					<li>{editor.email}</li>
+				{/each}
+			</ul>
+			<form on:submit|preventDefault={addEditorEmail}>
+				<input type="email" placeholder="Email" bind:this={editorInput} />
+				<button type="submit">Add</button>
+			</form>
 		</Modal>
 	{/if}
 	<h2>Items</h2>
@@ -170,6 +203,14 @@
 							{#each Object.entries(op.data.itemAmounts) as [id, amount]}
 								<li>
 									{pantry.inventory.find((i) => i._id === id)?.name}: {amount}
+								</li>
+							{/each}
+						</ul>
+					{:else if op.opType === 'AddEditors'}
+						<ul>
+							{#each op.data.editorsToAdd as editor}
+								<li>
+									{editor.email}{editor.uid != null ? ` (${users[editor.uid]?.displayName})` : ''}
 								</li>
 							{/each}
 						</ul>

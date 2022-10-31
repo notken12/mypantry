@@ -6,14 +6,18 @@ import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
-	event.depends(`/pantries/${event.params.id}`);
-	event.depends(`/pantries/${event.params.id}/inventory`);
+  event.depends(`/pantries/${event.params.id}`);
+  event.depends(`/pantries/${event.params.id}/inventory`);
 
-	const pantry = await PantryModel.findById(event.params.id);
-	if (!pantry) throw error(404, 'pantry not found');
-	const users = await getUsers([pantry.owner, ...pantry.editors]);
-	return {
-		pantry: JSON.parse(JSON.stringify(pantry)) as Pantry,
-		users: JSON.parse(JSON.stringify(users)) as Record<string, UserRecord>
-	};
+  const pantry = await PantryModel.findById(event.params.id);
+  if (!pantry) throw error(404, 'pantry not found');
+  const usersToGet = [pantry.owner];
+  for (const editor of pantry.editors) {
+    if (editor.uid) usersToGet.push(editor.uid);
+  }
+  const users = await getUsers(usersToGet);
+  return {
+    pantry: JSON.parse(JSON.stringify(pantry)) as Pantry,
+    users: JSON.parse(JSON.stringify(users)) as Record<string, UserRecord>
+  };
 };

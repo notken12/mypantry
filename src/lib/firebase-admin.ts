@@ -18,9 +18,8 @@ export const getUid = async (event: RequestEvent): Promise<Id | null> => {
     event.request.headers.get('firebaseIdToken') ?? event.cookies.get('firebaseIdToken');
   if (!idToken) return null;
   const token = await auth.verifyIdToken(idToken).catch(console.error);
-  if (token)
-    return token.uid;
-  return null
+  if (token) return token.uid;
+  return null;
 };
 
 export const getUsers = async (uids: Id[]) => {

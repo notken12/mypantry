@@ -9,7 +9,10 @@ export const getAllPantries = async () => {
 
 /** Get the pantries a user has access to */
 export const getUserPantries = async (uid: Id) => {
-  return await PantryModel.find({ $or: [{ owner: uid }, { editors: uid }] });
+  const user = await auth.getUser(uid);
+  return await PantryModel.find({
+    $or: [{ owner: uid }, { editors: { uid: uid, email: user.email } }]
+  });
 };
 
 /** Do GET /pantries to get all pantries in the world */
@@ -24,17 +27,20 @@ export const POST: RequestHandler = async (event) => {
   const pantryData = await formDataOrJson(request);
   const uid = await getUid(event);
   if (!uid) return new Response(null, { status: 401 });
+  const user = await auth.getUser(uid);
 
-  const pantryDoc = new PantryModel({ owner: uid, editors: [uid], ...pantryData });
+  const pantryDoc = new PantryModel({
+    owner: uid,
+    editors: [{ email: user.email, uid: user.uid }],
+    ...pantryData
+  });
   return new Response(JSON.stringify(await pantryDoc.save()));
 };
 
 //export const PUT: RequestHandler = async (event) => {
 
-
 //}
 //export const DELETE: RequestHandler = async (event) => {
-
 
 //}
 
