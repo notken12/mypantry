@@ -1,27 +1,31 @@
 import { PantryModel } from '$lib/db';
-import { getUid } from '$lib/firebase-admin';
-import type { ApproveCheckout, CheckoutData, Item, Pantry} from '$lib/Pantry';
+import { getUid, hasAccessToPantry } from '$lib/firebase-admin';
+import type { ApproveCheckout, CheckoutData, Item, Operation, Pantry } from '$lib/Pantry';
 import type { RequestHandler } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 
 export const POST: RequestHandler = async (event) => {
-	const { request, params } = event;
-	const data = (await request.json()) as {newData: CheckoutData, inventory: Item[]};
-	//const uid = await getUid(event);
-	//if (!uid) return new Response(null, { status: 401 });
+  const { request, params } = event;
+  const opRequest = (await request.json()) as ApproveCheckout;
+  const uid = await getUid(event);
+  if (!uid) return new Response(null, { status: 401 });
 
-	const pantryDoc = await PantryModel.findById(event.params.id);
+  const pantryDoc = await PantryModel.findById(event.params.id);
+  if (!hasAccessToPantry(uid, pantryDoc))
+    // Must have editor access to pantry
+    return new Response(null, { status: 401 });
 
-	const operation: ApproveCheckout = {
-		_id: nanoid(),
-		opType: 'ApproveCheckout',
-		timestamp: new Date(),
-		uid:null,
-		data: {checkoutData:data.newData, approvalStatus: true }
-	};
-	pantryDoc.inventory = data.inventory;
-	console.log(pantryDoc, data.inventory)
-	pantryDoc.history.push(operation);
-	const result = await pantryDoc.save();
-	return new Response(JSON.stringify(result));
+  for 
+
+  const operation: Operation = {
+      _id: nanoid(),
+      opType: 'ApproveCheckout',
+      timestamp: new Date(),
+      uid: null,
+      data: { requestOpId: opRequest.data.requestOpId, approvalStatus: opRequest.data.approvalStatus }
+    };
+    console.log(pantryDoc, opRequest.inventory);
+    pantryDoc.history.push(operation);
+  const result = await pantryDoc.save();
+  return new Response(JSON.stringify(result));
 };

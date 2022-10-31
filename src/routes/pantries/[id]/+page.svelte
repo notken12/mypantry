@@ -4,7 +4,7 @@
 
 	import { fetchAuthed } from '$lib/fetch';
 
-	import type { Pantry, Item, Operation, ApproveCheckout, CheckoutData } from '$lib/Pantry';
+	import type { Pantry, CheckoutData, ApproveCheckout, Id } from '$lib/Pantry';
 	import { user } from '$lib/stores';
 
 	import type { PageData } from './$types';
@@ -69,7 +69,7 @@
 
 	$: {
 		if (browser && qrCodeImage)
-			QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (e, url) => {
+			QRCode.toDataURL(window.location.origin + `/pantries/${pantry._id}/checkout`, (_e, url) => {
 				qrCodeImage.src = url;
 			});
 	}
@@ -100,15 +100,18 @@
 		});
 		invalidateAll();
 	};
-	const approveCheckout = async (e: Event, data: any) => {
-		let newData = data;
-		newData.approved = true;
-		let checkoutAmounts = newData.itemAmounts;
-		pantry.inventory.forEach(v => v.amount -= checkoutAmounts[v._id]);
-		console.log(JSON.stringify(pantry.inventory))
+	const approveCheckout = async (requestOpId: Id, approvalStatus: boolean) => {
+		const operation: ApproveCheckout = {
+			opType: 'ApproveCheckout',
+			uid: $user.uid,
+			data: {
+				requestOpId,
+				approvalStatus
+			}
+		};
 		await fetchAuthed(window.location.href + '/checkout/approve', {
 			method: 'POST',
-			body: JSON.stringify({newData:newData, inventory: pantry.inventory})
+			body: JSON.stringify(operation)
 		});
 	};
 </script>
@@ -172,12 +175,11 @@
 	{/if}
 	<h2>Items</h2>
 	<ul>
-		{#each pantry.inventory as item, i}
+		{#each pantry.inventory as item, _i}
 			{#if item.imageURL}
 				<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
 			{/if}
 			<li>{item.name}: {item.amount}</li>
-			<br />
 		{/each}
 	</ul>
 	{#if editorStatus}
@@ -191,7 +193,7 @@
 			</form>
 		</Modal>
 	{/if}
-	<div style="overflow-y:auto;height:200px;overflow-x:hidden;">
+	<div>
 		<h2>History</h2>
 		<ul>
 			{#each pantry.history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as op}
@@ -213,7 +215,7 @@
 							{/if}
 						</div>
 						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
-						{#if editorStatus}<button on:click={(e) => approveCheckout(e, op.data)}>
+						{#if editorStatus}<button on:click={() => approveCheckout(op.data)}>
 								Approve Request</button
 							>{/if}
 						<ul>

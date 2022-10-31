@@ -5,7 +5,7 @@
 </script>
 
 <a {href}>
-	<Icon icon="material-symbols:arrow-back" width="17" height="17" color="var(--base00)!important" />
+	<span class="material-symbols-outlined">arrow_back</span>
 	<slot />
 </a>
 
@@ -16,5 +16,9 @@
 		display: inline-flex;
 		gap: 16px;
 		align-items: center;
+	}
+
+	span:hover {
+		color: var(--base0D);
 	}
 </style>

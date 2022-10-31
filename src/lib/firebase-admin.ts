@@ -2,7 +2,7 @@
 import { initializeApp } from 'firebase-admin/app';
 import { FIREBASE_ADMIN_CONFIG } from '$env/static/private';
 import admin, { credential } from 'firebase-admin';
-import type { Id } from './Pantry';
+import type { Id, Pantry } from './Pantry';
 import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 import type { RequestEvent } from '@sveltejs/kit';
 
@@ -35,4 +35,11 @@ export const getUsers = async (uids: Id[]) => {
     users[user.uid] = user;
   }
   return users;
+};
+
+export const hasAccessToPantry = async (uid: Id, pantryDoc: Pantry) => {
+  const email = (await auth.getUser(uid)).email;
+  return (
+    pantryDoc?.owner !== uid && !pantryDoc?.editors.find((e) => e.uid === uid || e.email === email)
+  );
 };

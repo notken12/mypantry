@@ -54,10 +54,10 @@ export type CheckoutItems = OperationInterface & {
   data: CheckoutData;
 };
 
-export type ApproveCheckout = OperationInterface & {
+export type ApproveCheckout = {
   opType: 'ApproveCheckout';
-  uid: Id | null;
-  data: { checkoutData: CheckoutData; approvalStatus: boolean };
+  uid: Id;
+  data: { requestOpId: Id; approvalStatus: boolean };
 };
 
 export type AddEditors = OperationInterface & {
@@ -68,13 +68,8 @@ export type AddEditors = OperationInterface & {
   };
 };
 
-export type Operation =
-  | EditItems
-  | NewItem
-  | CheckoutItems
-  | EditInfo
-  | AddEditors
-  | ApproveCheckout;
+export type Operation = OperationInterface &
+  (EditItems | NewItem | CheckoutItems | EditInfo | AddEditors | ApproveCheckout);
 
 export type Editor = { uid: Id | null; email: string };
 

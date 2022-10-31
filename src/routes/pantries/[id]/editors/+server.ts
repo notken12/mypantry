@@ -1,6 +1,6 @@
 import { PantryModel } from '$lib/db';
-import { auth, getUid } from '$lib/firebase-admin';
-import type { AddEditors, Id } from '$lib/Pantry';
+import { auth, getUid, hasAccessToPantry } from '$lib/firebase-admin';
+import type { AddEditors, Id, Pantry } from '$lib/Pantry';
 import type { RequestHandler } from '@sveltejs/kit';
 import { nanoid } from 'nanoid';
 import type { AddEditorRequest } from './types';
@@ -12,9 +12,8 @@ export const POST: RequestHandler = async (event) => {
   if (!uid) return new Response(null, { status: 401 });
 
   const pantryDoc = await PantryModel.findById(params.id);
-  // Must have editor access to pantry
-  let email = (await auth.getUser(uid)).email;
-  if (pantryDoc?.owner !== uid && !pantryDoc?.editors.find(e => e.uid === uid || e.email === email))
+  if (!hasAccessToPantry(uid, pantryDoc))
+    // Must have editor access to pantry
     return new Response(null, { status: 401 });
 
   const reqData = (await request.json()) as AddEditorRequest;

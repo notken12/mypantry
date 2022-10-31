@@ -12,7 +12,6 @@
 		try {
 			const result = await signInWithPopup(auth, provider);
 			auth.updateCurrentUser(result.user);
-			console.log(result);
 		} catch (e) {
 			console.log(e);
 		}
