@@ -51,7 +51,7 @@
 	}
 
 	h1 {
-		font-weight: normal;
+		/* font-weight: normal; */
 		font-size: 17px;
 		background: var(--base0B);
 		color: var(--base00);
