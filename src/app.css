@@ -281,26 +281,3 @@ header p {
 	overflow-y:visible;
 	max-height:50vh;
 }
-
-banner {
-	width:100%;
-	display:flex;
-}
-
-banner form {
-	display:flex;
-	margin-left:auto;
-	position:relative
-}
-banner form input {
-	width:25vw;
-}
-banner form ul {
-    position: absolute;
-    top: 2.25em;
-    width: 100%;
-}
-banner form .material-symbols-outlined {
-	
-    line-height: 1.3;
-}

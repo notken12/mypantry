@@ -139,8 +139,6 @@
 				</li>
 			{/each}
 		</ul>
-	{:else}
-		<p>Cannot display, raw data: {JSON.stringify(op.data)}</p>
 	{/if}
 	<small><code>{new Date(op.timestamp).toLocaleString()}</code></small>
 </li>

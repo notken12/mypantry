@@ -109,6 +109,7 @@
 		flex-direction: column;
 		flex: 1;
 		animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+		
 		/* border-radius: 8px 8px 0 0; */
 	}
 
@@ -122,5 +123,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
+		gap: 16px;
 	}
 </style>

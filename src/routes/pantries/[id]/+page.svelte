@@ -128,7 +128,7 @@
 		<Modal title="Share" bind:this={shareModal}>
 			<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button
 			>
-			<b>Scan me to checkout!</b>
+			<b>Scan me to checkout! Idea: you can print this QR code and put it up at your pantry for easy access to checkout.</b>
 			<img bind:this={qrCodeImage} alt="QR code" width="200" />
 			<a href={qrCodeImage?.src} download>Download QRCode as image</a>
 		</Modal>
