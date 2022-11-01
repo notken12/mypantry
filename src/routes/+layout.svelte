@@ -4,6 +4,8 @@
 	import Cookies from 'js-cookie';
 	import { auth } from '$lib/firebase';
 	import type { LayoutData } from './$types';
+	import ProgressBar from 'svelte-progress-bar';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 
 	export let data: LayoutData;
 	let dataUser = data.user;
@@ -24,6 +26,16 @@
 		}
 		loaded.set(true);
 	});
+
+	let progress: ProgressBar;
+
+	beforeNavigate(() => {
+		progress.start();
+	});
+
+	afterNavigate(() => {
+		progress.complete();
+	});
 </script>
 
 <svelte:head>
@@ -38,6 +50,7 @@
 	/>
 </svelte:head>
 
+<ProgressBar bind:this={progress} color="var(--base08)" width="100%" />
 {#if $loaded}
 	<slot />
 {:else}
