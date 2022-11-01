@@ -20,6 +20,5 @@
 
 <main>
 	<Header href="../">Sign in</Header>
-	<p>{signInText}</p>
 	<button on:click={signInWithGoogle}>Sign in with Google</button>
 </main>

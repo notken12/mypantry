@@ -7,6 +7,7 @@
 
 	import type { PageData } from './$types';
 
+	import Header from '$lib/Header.svelte';
 	export let data: PageData;
 	let pantries: Pantry[];
 	$: pantries = data.pantries;
@@ -30,8 +31,7 @@
 </script>
 
 <main>
-	<a href="../">Home</a>
-	<h1>My Pantries</h1>
+	<Header href="./">Dashboard</Header>
 	<section>
 		<ul>
 			{#each pantries as pantry}
@@ -47,5 +47,4 @@
 		<input type="text" name="description" placeholder="Description" bind:value={newPantryDescription} />
 		<input type="submit" value="GO" />
 	</form>
-	<p>{$user?.displayName ?? 'Not signed in'}</p>
 </main>

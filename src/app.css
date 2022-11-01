@@ -97,6 +97,7 @@ body > div {
 	flex-direction: column;
 }
 
+
 p,
 h1,
 h2,
@@ -116,10 +117,18 @@ main {
 	overflow-y: auto;
 	max-width: 100%;
 	overflow-x: hidden;
-	padding: 16px;
+	padding: 1.5em;
 	align-items: flex-start;
-	gap: 16px;
+	gap: 4em;
+	flex-wrap:nowrap;
 }
+@media (min-width:801px)  { 
+
+
+	#history {
+		overflow-y:scroll;
+	}
+ }
 
 h1 {
 	/* font-weight: normal; */
@@ -241,7 +250,7 @@ a {
 
 li {
 	list-style: none;
-	padding: 8px;
+	padding: 1em;
 	margin: 0;
 	display: flex;
 	flex-direction: column;
@@ -260,4 +269,15 @@ ul {
 header {
 	display: flex;
 	gap: 16px;
+	align-items: center;
+	width:100%;
+}
+
+header p {
+	margin-left:auto;
+}
+
+#history {
+	overflow-y:visible;
+	max-height:50vh;
 }

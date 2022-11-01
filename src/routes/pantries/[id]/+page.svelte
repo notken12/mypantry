@@ -97,82 +97,90 @@
 
 <main>
 	<Header href="/dashboard">{pantry.name ?? 'Unnamed pantry'}</Header>
-	<p>{pantry.description ?? 'No description provided'}</p>
-	<p>Collaborators:</p>
-	<ul>
-		{#each pantry.editors as editor}
-			<li>
-				{editor.email}{editor.uid != null
-					? ` (${users[editor.uid]?.displayName})`
-					: ''}{pantry.owner === editor.uid ? ' (Owner)' : ''}
-			</li>
-		{/each}
-	</ul>
-	<a href={`./${pantry._id}/checkout`}>Checkout items</a>
-	<button on:click={shareModal.open}>Share Checkout Page</button>
-	<Modal title="Share" bind:this={shareModal}>
-		<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button>
-		<b>Scan me to checkout!</b>
-		<img bind:this={qrCodeImage} alt="QR code" width="200" />
-		<a href={qrCodeImage?.src} download>Download QRCode as image</a>
-	</Modal>
-
-	{#if editorStatus}
-		<button on:click={addCollaboratorsModal.open}> Add collaborators </button>
-		<button on:click={pantryInfoModal.open}>Edit Pantry Info</button>
-		<Modal title="Edit Pantry Info" bind:this={pantryInfoModal}>
-			<form on:submit={editPantryDesc}>
-				<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
-				<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
-				<input type="submit" value="Change" />
-			</form>
-
-			{#if $user?.uid == pantry.owner}
-				<!--this is only for owners-->
-				<form on:submit={(e) => deletePantry(e)}>
-					<legend style="color:red;">Delete Pantry</legend>
-					<input
-						type="text"
-						placeholder="Type the name of this pantry to delete it"
-						bind:value={confirmDelete}
-					/>
-					<input type="submit" value="Delete" />
+	<div id="info">
+		<p>{pantry.description ?? 'No description provided'}</p>
+		<br>
+		<ul>
+			<small>Collaborators:</small>
+			{#each pantry.editors as editor}
+				<li>
+					{editor.email}{editor.uid != null
+						? ` (${users[editor.uid]?.displayName})`
+						: ''}{pantry.owner === editor.uid ? ' (Owner)' : ''}
+				</li>
+			{/each}
+		</ul>
+		<a href={`./${pantry._id}/checkout`}>Checkout items</a>
+		<button on:click={shareModal.open}>Share Checkout Page</button>
+		<Modal title="Share" bind:this={shareModal}>
+			<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button
+			>
+			<b>Scan me to checkout!</b>
+			<img bind:this={qrCodeImage} alt="QR code" width="200" />
+			<a href={qrCodeImage?.src} download>Download QRCode as image</a>
+		</Modal>
+	</div>
+	<div id="editor">
+		<h2>Edit pantry</h2>
+		{#if editorStatus}
+			<button on:click={addCollaboratorsModal.open}> Add collaborators </button>
+			<button on:click={pantryInfoModal.open}>Edit Pantry Info</button>
+			<Modal title="Edit Pantry Info" bind:this={pantryInfoModal}>
+				<form on:submit={editPantryDesc}>
+					<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
+					<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
+					<input type="submit" value="Change" />
 				</form>
-			{/if}
-		</Modal>
-		<Modal title="Add collaborators" bind:this={addCollaboratorsModal} on:done={submitAddEditors}>
-			<ul>
-				{#each editorsToAdd as editor}
-					<li>{editor.email}</li>
-				{/each}
-			</ul>
-			<form on:submit|preventDefault={addEditorEmail}>
-				<input type="email" placeholder="Email" bind:this={editorInput} />
-				<button type="submit">Add</button>
-			</form>
-		</Modal>
-	{/if}
-	<h2>Items</h2>
-	<ul>
-		{#each pantry.inventory as item, _i}
-			{#if item.imageURL}
-				<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
-			{/if}
-			<li>{item.name}: {item.amount}</li>
-		{/each}
-	</ul>
-	{#if editorStatus}
-		<button on:click={newItemModal.open}>Add New Item</button>
-		<Modal title="New Item" bind:this={newItemModal}>
-			<form on:submit={newItem}>
-				<input type="file" name="Image" accept="image/*" />
-				<input type="text" placeholder="Item name" bind:value={newItemName} />
-				<input type="number" placeholder="Amount" bind:value={amountOfItem} />
-				<input type="submit" value="New item" />
-			</form>
-		</Modal>
-	{/if}
-	<div class="history">
+
+				{#if $user?.uid == pantry.owner}
+					<!--this is only for owners-->
+					<form on:submit={(e) => deletePantry(e)}>
+						<legend style="color:red;">Delete Pantry</legend>
+						<input
+							type="text"
+							placeholder="Type the name of this pantry to delete it"
+							bind:value={confirmDelete}
+						/>
+						<input type="submit" value="Delete" />
+					</form>
+				{/if}
+			</Modal>
+			<Modal title="Add collaborators" bind:this={addCollaboratorsModal} on:done={submitAddEditors}>
+				<ul>
+					{#each editorsToAdd as editor}
+						<li>{editor.email}</li>
+					{/each}
+				</ul>
+				<form on:submit|preventDefault={addEditorEmail}>
+					<input type="email" placeholder="Email" bind:this={editorInput} />
+					<button type="submit">Add</button>
+				</form>
+			</Modal>
+		{/if}
+	</div>
+	<div id="items">
+		<h2>Items</h2>
+		<ul>
+			{#each pantry.inventory as item, _i}
+				{#if item.imageURL}
+					<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
+				{/if}
+				<li>{item.name}: {item.amount}</li>
+			{/each}
+		</ul>
+		{#if editorStatus}
+			<button on:click={newItemModal.open}>Add New Item</button>
+			<Modal title="New Item" bind:this={newItemModal}>
+				<form on:submit={newItem}>
+					<input type="file" name="Image" accept="image/*" />
+					<input type="text" placeholder="Item name" bind:value={newItemName} />
+					<input type="number" placeholder="Amount" bind:value={amountOfItem} />
+					<input type="submit" value="New item" />
+				</form>
+			</Modal>
+		{/if}
+	</div>
+	<div id="history">
 		<h2>History</h2>
 		<ul>
 			{#each pantry.history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as op}
