@@ -113,6 +113,8 @@
 			method: 'POST',
 			body: JSON.stringify(operation)
 		});
+		invalidateAll();
+		//pantry.inventory = await fetchAuthed
 	};
 </script>
 
@@ -150,7 +152,7 @@
 
 			{#if $user?.uid == pantry.owner}
 				<!--this is only for owners-->
-				<form on:submit={() => deletePantry}>
+				<form on:submit={e => deletePantry(e)}>
 					<legend style="color:red;">Delete Pantry</legend>
 					<input
 						type="text"
@@ -193,7 +195,7 @@
 			</form>
 		</Modal>
 	{/if}
-	<div>
+	<div id="history">
 		<h2>History</h2>
 		<ul>
 			{#each pantry.history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as op}
@@ -215,7 +217,7 @@
 							{/if}
 						</div>
 						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
-						{#if editorStatus}<button on:click={() => approveCheckout(op.data)}>
+						{#if editorStatus && !op.data.approved}<button on:click={() => approveCheckout(op._id, true)}>
 								Approve Request</button
 							>{/if}
 						<ul>
@@ -235,18 +237,18 @@
 						</ul>
 					{:else if op.opType === 'ApproveCheckout'}
 						<div>
-							{#if op.data.checkoutData.optionalInfo}
+							<!--{#if op.data.checkoutData.optionalInfo}
 								<p>
 									Request by {op.data.checkoutData.optionalInfo?.firstName}
 									{op.data.checkoutData.optionalInfo?.lastName}
 								</p>
 								<p>Additional Remarks: {op.data.checkoutData.optionalInfo?.additionalRemarks}</p>
-							{/if}
+							{/if}-->
 						</div>
 						<ul>
-							{#each Object.entries(op.data.checkoutData.itemAmounts) as [id, amount]}
+							<!--{#each Object.entries(op.data.checkoutData.itemAmounts) as [id, amount]}
 								<li>{pantry.inventory.find((i) => i._id === id)?.name}: {amount}</li>
-							{/each}
+							{/each}-->
 						</ul>
 					{:else}
 						<p>Cannot display, raw data: {JSON.stringify(op.data)}</p>

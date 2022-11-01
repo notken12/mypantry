@@ -14,8 +14,16 @@ export const POST: RequestHandler = async (event) => {
   if (!hasAccessToPantry(uid, pantryDoc))
     // Must have editor access to pantry
     return new Response(null, { status: 401 });
+  let requested = pantryDoc.history.find(v => v._id == opRequest.data.requestOpId);
+  let checkoutAmounts = Object(requested.data.itemAmounts);
+  for (let item in checkoutAmounts) {
+    pantryDoc.inventory.find(v => v._id == item).amount -= checkoutAmounts[item];
 
-  for 
+    if (pantryDoc.inventory.find(v => v._id == item).amount < 0) return new Response(null, { status: 400 });
+  };
+  requested.data.approved = true;
+  console.log(requested)
+  
 
   const operation: Operation = {
       _id: nanoid(),
@@ -24,8 +32,8 @@ export const POST: RequestHandler = async (event) => {
       uid: null,
       data: { requestOpId: opRequest.data.requestOpId, approvalStatus: opRequest.data.approvalStatus }
     };
-    console.log(pantryDoc, opRequest.inventory);
     pantryDoc.history.push(operation);
   const result = await pantryDoc.save();
+  console.log(pantryDoc.history)
   return new Response(JSON.stringify(result));
 };

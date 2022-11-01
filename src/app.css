@@ -260,3 +260,7 @@ header {
 	display: flex;
 	gap: 16px;
 }
+
+#history {
+	overflow-y:auto;
+}

@@ -9,7 +9,7 @@
 	let pantry: Pantry;
 	$: pantry = data.pantry;
 	let users: Record<Id, UserRecord>;
-	$: users = data.users;
+	//$: users = data.users;
 
 	let search: String;
 	let amounts: Record<Id, number> = {};
@@ -40,8 +40,8 @@
 
 <main>
 	<Header href=".">Checkout items</Header>
-	<h2>{pantry.name}</h2>
-	<p>{pantry.description}</p>
+	<h2>{pantry.name ?? 'Unnamed pantry'}</h2>
+	<p>{pantry.description ?? 'No description provided'}</p>
 	<input type="text" placeholder="Search" bind:value={search} />
 	<ul>
 		{#each pantry.inventory.filter((i) => {
