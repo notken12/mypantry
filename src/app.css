@@ -235,6 +235,7 @@ input {
 	font-size: 17px !important;
 	line-height: 17px !important;
 	height: 33px !important;
+	font-family: 'Inter', sans-serif!import;
 }
 
 input:active,

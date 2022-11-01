@@ -6,11 +6,15 @@
 	import type { LayoutData } from './$types';
 	import ProgressBar from 'svelte-progress-bar';
 	import { afterNavigate, beforeNavigate } from '$app/navigation';
+	import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 
 	export let data: LayoutData;
-	let dataUser = data.user;
-	user.set(dataUser);
-	loaded.set(true);
+	let dataUser: UserRecord;
+	$: dataUser = data.user;
+	$: {
+		user.set(dataUser);
+		loaded.set(true);
+	}
 
 	onAuthStateChanged(auth, async (u) => {
 		if (u) {
@@ -23,6 +27,7 @@
 			// User is signed out
 			// ...
 			user.set(null);
+			Cookies.remove('firebaseIdToken');
 		}
 		loaded.set(true);
 	});

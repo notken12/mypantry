@@ -13,11 +13,11 @@
 	};
 
 	const search = async (e: Event) => {
+		e.preventDefault();
 		if (query.length === 0) {
 			await getAllPantries();
 			return
 		}
-		e.preventDefault();
 		const params = new URLSearchParams();
 		params.append('q', query);
 		const results = (await (await fetch('/search?' + params.toString())).json()) as Pantry[];
