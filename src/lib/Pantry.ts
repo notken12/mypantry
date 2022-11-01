@@ -85,5 +85,4 @@ export type Pantry = {
   owner: Id;
   editors: Editor[];
   history: Operation[];
-  location: GeolocationPosition | string;
 };

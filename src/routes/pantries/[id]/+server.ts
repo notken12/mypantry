@@ -15,13 +15,13 @@ export const GET: RequestHandler = async ({ params }) => {
 /* }; */
 export const POST: RequestHandler = async (event) => {
   const { request, params } = event;
-  const pantryData = (await request.json()) as Pantry;
+  const pantryData = (await request.json()) as Partial<Pantry>;
   const uid = await getUid(event);
   if (!uid) return new Response(null, { status: 401 });
 
   const pantryDoc = await PantryModel.findById(params.id);
+  
   if (!hasAccessToPantry(uid, pantryDoc)) return new Response(null, { status: 401 });
-
   pantryDoc.set(pantryData);
   const operation: EditInfo = {
     _id: nanoid(),

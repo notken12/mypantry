@@ -57,6 +57,7 @@
 		<h2>Want to easily manage your own pantry?</h2>
 		<a href="/dashboard">Create them here in your own dashboard!</a>
 		<a href="/about-us">Learn more about our team.</a>
+		<a href="https://github.com/notken12/mypantry">Source code on GitHub</a>
 	</section>
 </main>
 
@@ -71,7 +72,7 @@
 		padding: 16px;
 	}
 	#searchResults {
-		height:50vh;
-		overflow-y:auto;
+		height: 50vh;
+		overflow-y: auto;
 	}
 </style>

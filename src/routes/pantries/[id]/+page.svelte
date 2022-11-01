@@ -38,19 +38,21 @@
 	};
 	let newPantryName = '';
 	let newPantryDesc = '';
-	let newPantryLocation = '';
+	let newPantryAddress = '';
 	const editPantryDesc = async (e: Event) => {
 		e.preventDefault();
 		const name = newPantryName;
 		newPantryName = '';
 		const description = newPantryDesc;
 		newPantryDesc = '';
-		const location = newPantryLocation;
-		newPantryLocation = '';
+		console.log(newPantryAddress);
+		const address = newPantryAddress;
+		newPantryAddress = '';
 		await fetchAuthed(`/pantries/${pantry._id}`, {
 			method: 'POST',
-			body: JSON.stringify({ name, description, location })
+			body: JSON.stringify({ name, description, address })
 		});
+		console.log(pantry)
 		invalidateAll();
 	};
 	let confirmDelete = '';
@@ -111,7 +113,7 @@
 	<Header href="/dashboard"><h1>{pantry.name ?? 'Unnamed pantry'}</h1></Header>
 	<div id="info">
 		<p>{pantry.description ?? 'No description provided'}</p>
-		{#if pantry.location} <p>{pantry.location}</p> {/if}
+		{#if pantry.address} <p><span class="material-symbols-outlined">pin_drop</span>{pantry.address}</p> {/if}
 		<br />
 		<ul>
 			<small>Collaborators:</small>
@@ -142,7 +144,7 @@
 				<form on:submit={editPantryDesc}>
 					<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
 					<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
-					<input type="text" placeholder="New Pantry Location" bind:value={newPantryLocation} />
+					<input type="text" placeholder="New Pantry Location" bind:value={newPantryAddress} />
 					<input type="submit" value="Change" />
 				</form>
 
