@@ -142,7 +142,7 @@
 				<form on:submit={editPantryDesc}>
 					<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
 					<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
-					<input type="text" name="Pantry Location" bind:value={newPantryLocation} />
+					<input type="text" placeholder="New Pantry Location" bind:value={newPantryLocation} />
 					<input type="submit" value="Change" />
 				</form>
 
