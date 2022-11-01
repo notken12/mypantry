@@ -20,6 +20,7 @@ export type EditItems = OperationInterface & {
   uid: Id;
   opType: 'EditItems';
   data: {
+    old: Record<Id, Partial<Item>>;
     changes: Record<Id, Partial<Item>>;
   };
 };

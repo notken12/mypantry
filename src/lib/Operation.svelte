@@ -97,7 +97,7 @@
 		<h4>
 			{op.data.approvalStatus ? 'Approve' : 'Deny'} checkout
 		</h4>
-		<p>{users[op.uid].displayName}</p>
+		<p>{users[op.uid]?.displayName}</p>
 		<div>
 			{op.data.approvalStatus ? 'Approved' : 'Deny'}
 			<a href={`#history-${op.data.requestOpId}`}>request</a>
@@ -120,6 +120,25 @@
 		<!-- 		<li>{pantry.inventory.find((i) => i._id === id)?.name}: {amount}</li> -->
 		<!-- 	{/each} -->
 		<!-- </ul> -->
+	{:else if op.opType === 'EditItems'}
+		<ul>
+			{#each Object.entries(op.data?.changes) as [id, changes]}
+				<li>
+					{#if op.data.old}
+						{#if changes.name}
+							<div>
+								Name: {op.data.old[id].name} -> {changes.name}
+							</div>
+						{/if}
+						{#if changes.amount}
+							<div>
+								Quantity: {op.data.old[id].amount} -> {changes.amount}
+							</div>
+						{/if}
+					{/if}
+				</li>
+			{/each}
+		</ul>
 	{:else}
 		<p>Cannot display, raw data: {JSON.stringify(op.data)}</p>
 	{/if}

@@ -35,7 +35,7 @@
 
 
 	<section>
-		<h2><h1>My Pantries</h1></h2>
+		<h2>My Pantries</h2>
 		<ul>
 			{#each pantries as pantry}
 				<li>

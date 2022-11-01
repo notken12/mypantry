@@ -38,15 +38,18 @@
 	};
 	let newPantryName = '';
 	let newPantryDesc = '';
+	let newPantryLocation = '';
 	const editPantryDesc = async (e: Event) => {
 		e.preventDefault();
 		const name = newPantryName;
 		newPantryName = '';
 		const description = newPantryDesc;
 		newPantryDesc = '';
+		const location = newPantryLocation;
+		newPantryLocation = '';
 		await fetchAuthed(`/pantries/${pantry._id}`, {
 			method: 'POST',
-			body: JSON.stringify({ name, description })
+			body: JSON.stringify({ name, description, location })
 		});
 		invalidateAll();
 	};
@@ -67,6 +70,7 @@
 	let pantryInfoModal: Modal;
 	let newItemModal: Modal;
 	let shareModal: Modal;
+	let editItemsModal: Modal;
 	let addCollaboratorsModal: Modal;
 
 	$: {
@@ -93,13 +97,22 @@
 		});
 		invalidateAll();
 	};
+
+	const editItems = async () => {
+		await fetchAuthed(`/pantries/${pantry._id}/inventory`, {
+			method: 'PUT',
+			body: JSON.stringify(pantry.inventory)
+		});
+		invalidateAll();
+	};
 </script>
 
 <main>
 	<Header href="/dashboard"><h1>{pantry.name ?? 'Unnamed pantry'}</h1></Header>
 	<div id="info">
 		<p>{pantry.description ?? 'No description provided'}</p>
-		<br>
+		{#if pantry.location} <p>{pantry.location}</p> {/if}
+		<br />
 		<ul>
 			<small>Collaborators:</small>
 			{#each pantry.editors as editor}
@@ -129,6 +142,7 @@
 				<form on:submit={editPantryDesc}>
 					<input type="text" placeholder="New Pantry Name" bind:value={newPantryName} />
 					<input type="text" placeholder="New Pantry Description" bind:value={newPantryDesc} />
+					<input type="text" name="Pantry Location" bind:value={newPantryLocation} />
 					<input type="submit" value="Change" />
 				</form>
 
@@ -162,9 +176,6 @@
 		<h2>Items</h2>
 		<ul>
 			{#each pantry.inventory as item, _i}
-				{#if item.imageURL}
-					<img src={item.imageURL?.href} alt={item.name + ' item image'} width="50" />
-				{/if}
 				<li>{item.name}: {item.amount}</li>
 			{/each}
 		</ul>
@@ -172,11 +183,22 @@
 			<button on:click={newItemModal.open}>Add New Item</button>
 			<Modal title="New Item" bind:this={newItemModal}>
 				<form on:submit={newItem}>
-					<input type="file" name="Image" accept="image/*" />
 					<input type="text" placeholder="Item name" bind:value={newItemName} />
 					<input type="number" placeholder="Amount" bind:value={amountOfItem} />
 					<input type="submit" value="New item" />
 				</form>
+			</Modal>
+			<button on:click={editItemsModal.open}>Edit items</button>
+			<Modal title="Edit items" bind:this={editItemsModal} on:done={editItems}>
+				<p>Edit items by changing the inputs for their names and quantities.</p>
+				<ul>
+					{#each pantry.inventory as item, _i}
+						<li>
+							<input type="text" bind:value={item.name} placeholder="Item name" />
+							<input type="number" min="0" bind:value={item.amount} placeholder="Quantity" />
+						</li>
+					{/each}
+				</ul>
 			</Modal>
 		{/if}
 	</div>
