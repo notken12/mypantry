@@ -18,6 +18,13 @@
 			hidden = true;
 		}, 200);
 	};
+
+	const close = () => {
+		shown = false;
+		setTimeout(() => {
+			hidden = true;
+		}, 200);
+	}
 </script>
 
 {#if !hidden}
@@ -25,7 +32,7 @@
 	<div class="bg" class:fadeout={!shown && !hidden}>
 		<div class="wrapper">
 			<header>
-				<button style="visibility: hidden;">Done</button>
+				<button on:click={close}>Cancel</button>
 				<h1>{title}</h1>
 				<button on:click={done}>Done</button>
 			</header>
@@ -102,8 +109,6 @@
 		flex-direction: column;
 		flex: 1;
 		animation: pop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-		height:min-content;
-		width:min-content;
 		/* border-radius: 8px 8px 0 0; */
 	}
 
