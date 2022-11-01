@@ -74,15 +74,6 @@
 			});
 	}
 
-	const opTypes = {
-		NewItem: 'New item',
-		EditItems: 'Edit items',
-		CheckoutItems: 'Checkout items',
-		EditInfo: 'Edit pantry info',
-		AddEditors: 'Add collaborators',
-		ApproveCheckout: 'Approve Checkout'
-	};
-
 	let editorsToAdd: { email: string }[] = [];
 	let editorInput: HTMLInputElement;
 	const addEditorEmail = async () => {
@@ -99,20 +90,6 @@
 			body: JSON.stringify(req)
 		});
 		invalidateAll();
-	};
-	const approveCheckout = async (requestOpId: Id, approvalStatus: boolean) => {
-		const operation: ApproveCheckout = {
-			opType: 'ApproveCheckout',
-			uid: $user.uid,
-			data: {
-				requestOpId,
-				approvalStatus
-			}
-		};
-		await fetchAuthed(window.location.href + '/checkout/approve', {
-			method: 'POST',
-			body: JSON.stringify(operation)
-		});
 	};
 </script>
 
@@ -235,13 +212,9 @@
 						</ul>
 					{:else if op.opType === 'ApproveCheckout'}
 						<div>
-							{#if op.data.checkoutData.optionalInfo}
-								<p>
-									Request by {op.data.checkoutData.optionalInfo?.firstName}
-									{op.data.checkoutData.optionalInfo?.lastName}
-								</p>
-								<p>Additional Remarks: {op.data.checkoutData.optionalInfo?.additionalRemarks}</p>
-							{/if}
+							{op.data.approvalStatus ? 'Approved' : 'Canceled'} request by {pantry.history.find(
+								(o) => o._id === op.data.requestOpId
+							)?.uid}
 						</div>
 						<ul>
 							{#each Object.entries(op.data.checkoutData.itemAmounts) as [id, amount]}
