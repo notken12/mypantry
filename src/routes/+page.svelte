@@ -13,6 +13,10 @@
 	};
 
 	const search = async (e: Event) => {
+		if (query.length === 0) {
+			await getAllPantries();
+			return
+		}
 		e.preventDefault();
 		const params = new URLSearchParams();
 		params.append('q', query);
