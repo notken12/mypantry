@@ -36,6 +36,7 @@
 			method: 'POST',
 			body: JSON.stringify(checkoutData)
 		});
+		window.location.assign(window.location.origin + `/pantries/${pantry._id}`)
 	};
 </script>
 
