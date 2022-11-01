@@ -8,8 +8,6 @@
 	import Cookies from 'js-cookie';
 	const provider = new GoogleAuthProvider();
 
-	$: signInText = $user ? `Signed in as ${$user?.displayName}` : 'Not signed in';
-
 	const signInWithGoogle = async () => {
 		try {
 			const result = await signInWithPopup(auth, provider);
@@ -29,6 +27,10 @@
 		invalidateAll();
 	};
 </script>
+
+<svelte:head>
+	<title>Sign in - MyPantry</title>
+</svelte:head>
 
 <main>
 	<Header href="../"><h1>Sign in</h1></Header>

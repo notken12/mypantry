@@ -36,9 +36,13 @@
 			method: 'POST',
 			body: JSON.stringify(checkoutData)
 		});
-		window.location.assign(window.location.origin + `/pantries/${pantry._id}`)
+		window.location.assign(window.location.origin + `/pantries/${pantry._id}`);
 	};
 </script>
+
+<svelte:head>
+	<title>{pantry.name} Checkout - MyPantry</title>
+</svelte:head>
 
 <main>
 	<Header href="."><h1>Checkout items</h1></Header>

@@ -30,6 +30,10 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Dashboard - MyPantry</title>
+</svelte:head>
+
 <main>
 	<Header href="./"><h1>Dashboard</h1></Header>
 

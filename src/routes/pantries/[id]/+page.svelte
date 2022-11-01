@@ -52,7 +52,7 @@
 			method: 'POST',
 			body: JSON.stringify({ name, description, address })
 		});
-		console.log(pantry)
+		console.log(pantry);
 		invalidateAll();
 	};
 	let confirmDelete = '';
@@ -109,11 +109,17 @@
 	};
 </script>
 
+<svelte:head>
+	<title>{pantry.name} - MyPantry</title>
+</svelte:head>
+
 <main>
 	<Header href="/dashboard"><h1>{pantry.name ?? 'Unnamed pantry'}</h1></Header>
 	<div id="info">
 		<p>{pantry.description ?? 'No description provided'}</p>
-		{#if pantry.address} <p><span class="material-symbols-outlined">pin_drop</span>{pantry.address}</p> {/if}
+		{#if pantry.address}
+			<p><span class="material-symbols-outlined">pin_drop</span>{pantry.address}</p>
+		{/if}
 		<br />
 		<ul>
 			<small>Collaborators:</small>
@@ -130,7 +136,10 @@
 		<Modal title="Share" bind:this={shareModal}>
 			<button on:click={() => navigator.clipboard.writeText(window.location.href)}>Copy link</button
 			>
-			<b>Scan me to checkout! Idea: you can print this QR code and put it up at your pantry for easy access to checkout.</b>
+			<b
+				>Scan me to checkout! Idea: you can print this QR code and put it up at your pantry for easy
+				access to checkout.</b
+			>
 			<img bind:this={qrCodeImage} alt="QR code" width="200" />
 			<a href={qrCodeImage?.src} download>Download QRCode as image</a>
 		</Modal>

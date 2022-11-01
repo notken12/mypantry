@@ -16,7 +16,7 @@
 		e.preventDefault();
 		if (query.length === 0) {
 			await getAllPantries();
-			return
+			return;
 		}
 		const params = new URLSearchParams();
 		params.append('q', query);
@@ -28,6 +28,10 @@
 		getAllPantries();
 	});
 </script>
+
+<svelte:head>
+	<title>MyPantry</title>
+</svelte:head>
 
 <main>
 	<Header backLink={false} signInLink={true}><h1>MyPantry</h1></Header>
