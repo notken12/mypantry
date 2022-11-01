@@ -13,6 +13,6 @@ $: signInText = $user ? `Signed in as ${$user?.displayName}` : 'Not signed in';
 	{#if backLink}
 		<BackLink {href} />
 	{/if}
-	<h1><slot /></h1>
+	<slot />
 	<p>{signInText} </p>
 </header>

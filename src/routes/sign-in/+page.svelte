@@ -19,6 +19,6 @@
 </script>
 
 <main>
-	<Header href="../">Sign in</Header>
+	<Header href="../"><h1>Sign in</h1></Header>
 	<button on:click={signInWithGoogle}>Sign in with Google</button>
 </main>

@@ -96,7 +96,7 @@
 </script>
 
 <main>
-	<Header href="/dashboard">{pantry.name ?? 'Unnamed pantry'}</Header>
+	<Header href="/dashboard"><h1>{pantry.name ?? 'Unnamed pantry'}</h1></Header>
 	<div id="info">
 		<p>{pantry.description ?? 'No description provided'}</p>
 		<br>

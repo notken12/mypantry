@@ -31,8 +31,11 @@
 </script>
 
 <main>
-	<Header href="./">Dashboard</Header>
+	<Header href="./"><h1>Dashboard</h1></Header>
+
+
 	<section>
+		<h2><h1>My Pantries</h1></h2>
 		<ul>
 			{#each pantries as pantry}
 				<li>

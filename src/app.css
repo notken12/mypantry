@@ -119,7 +119,7 @@ main {
 	overflow-x: hidden;
 	padding: 1.5em;
 	align-items: flex-start;
-	gap: 4em;
+	gap: 16px;
 	flex-wrap:nowrap;
 }
 @media (min-width:801px)  { 

@@ -40,7 +40,7 @@
 </script>
 
 <main>
-	<Header href=".">Checkout items</Header>
+	<Header href="."><h1>Checkout items</h1></Header>
 	<h2>{pantry.name ?? 'Unnamed pantry'}</h2>
 	<p>{pantry.description ?? 'No description provided'}</p>
 	<input type="text" placeholder="Search" bind:value={search} />

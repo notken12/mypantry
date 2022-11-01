@@ -78,6 +78,7 @@ export type Pantry = {
   _id: Id;
   name: string;
   description: string;
+  address: string;
   createdDate: Date;
   inventory: Item[];
   owner: Id;

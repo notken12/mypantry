@@ -5,5 +5,5 @@
 </script>
 
 <main>
-	<Header href="../">About Us</Header>
+	<Header href="../"><h1>About Us</h1></Header>
 </main>
