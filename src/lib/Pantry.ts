@@ -46,6 +46,7 @@ export type CheckoutData = {
   };
   itemAmounts: Record<Id, number>;
   approved: boolean;
+  pending: boolean;
 };
 
 export type CheckoutItems = OperationInterface & {
@@ -82,5 +83,5 @@ export type Pantry = {
   owner: Id;
   editors: Editor[];
   history: Operation[];
-  location: GeolocationPosition;
+  location: GeolocationPosition | string;
 };

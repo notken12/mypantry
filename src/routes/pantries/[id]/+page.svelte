@@ -4,7 +4,7 @@
 
 	import { fetchAuthed } from '$lib/fetch';
 
-	import type { Pantry, CheckoutData, ApproveCheckout, Id } from '$lib/Pantry';
+	import type { Pantry } from '$lib/Pantry';
 	import { user } from '$lib/stores';
 
 	import type { PageData } from './$types';
@@ -13,6 +13,7 @@
 	import { browser } from '$app/environment';
 	import type { AddEditorRequest } from './editors/types';
 	import Header from '$lib/Header.svelte';
+	import Operation from '$lib/Operation.svelte';
 
 	export let data: PageData;
 	let pantry: Pantry;
@@ -61,7 +62,8 @@
 		} else confirmDelete = '';
 	};
 	let qrCodeImage: HTMLImageElement;
-	$: editorStatus = pantry.editors.find((e) => e.uid === $user?.uid || e.email === $user?.email);
+	$: editorStatus =
+		pantry.editors.find((e) => e.uid === $user?.uid || e.email === $user?.email) != null;
 	let pantryInfoModal: Modal;
 	let newItemModal: Modal;
 	let shareModal: Modal;
@@ -85,7 +87,7 @@
 	const submitAddEditors = async () => {
 		if (editorsToAdd.length === 0) return;
 		const req: AddEditorRequest = { editorsToAdd };
-		await fetchAuthed(window.location.href + '/editors', {
+		await fetchAuthed(`./${pantry._id}/editors`, {
 			method: 'POST',
 			body: JSON.stringify(req)
 		});
@@ -127,7 +129,7 @@
 
 			{#if $user?.uid == pantry.owner}
 				<!--this is only for owners-->
-				<form on:submit={() => deletePantry}>
+				<form on:submit={(e) => deletePantry(e)}>
 					<legend style="color:red;">Delete Pantry</legend>
 					<input
 						type="text"
@@ -170,62 +172,11 @@
 			</form>
 		</Modal>
 	{/if}
-	<div>
+	<div class="history">
 		<h2>History</h2>
 		<ul>
 			{#each pantry.history.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()) as op}
-				<li>
-					<h4>{opTypes[op.opType]}</h4>
-					{#if op.uid}
-						<p>{users[op.uid].displayName}</p>
-					{/if}
-					{#if op.opType === 'NewItem'}
-						<p>{op.data.item.name}</p>
-					{:else if op.opType === 'EditInfo'}
-						<p>Name: {op.data.newInfo.name}</p>
-						<p>Description: {op.data.newInfo.description}</p>
-					{:else if op.opType === 'CheckoutItems'}
-						<div>
-							{#if op.data.optionalInfo}
-								<p>Request by {op.data.optionalInfo?.firstName} {op.data.optionalInfo?.lastName}</p>
-								<p>Additional Remarks: {op.data.optionalInfo?.additionalRemarks}</p>
-							{/if}
-						</div>
-						<p>{op.data.approved ? 'Approved' : 'Not approved'}</p>
-						{#if editorStatus}<button on:click={() => approveCheckout(op.data)}>
-								Approve Request</button
-							>{/if}
-						<ul>
-							{#each Object.entries(op.data.itemAmounts) as [id, amount]}
-								<li>
-									{pantry.inventory.find((i) => i._id === id)?.name}: {amount}
-								</li>
-							{/each}
-						</ul>
-					{:else if op.opType === 'AddEditors'}
-						<ul>
-							{#each op.data.editorsToAdd as editor}
-								<li>
-									{editor.email}{editor.uid != null ? ` (${users[editor.uid]?.displayName})` : ''}
-								</li>
-							{/each}
-						</ul>
-					{:else if op.opType === 'ApproveCheckout'}
-						<div>
-							{op.data.approvalStatus ? 'Approved' : 'Canceled'} request by {pantry.history.find(
-								(o) => o._id === op.data.requestOpId
-							)?.uid}
-						</div>
-						<ul>
-							{#each Object.entries(op.data.checkoutData.itemAmounts) as [id, amount]}
-								<li>{pantry.inventory.find((i) => i._id === id)?.name}: {amount}</li>
-							{/each}
-						</ul>
-					{:else}
-						<p>Cannot display, raw data: {JSON.stringify(op.data)}</p>
-					{/if}
-					<small><code>{new Date(op.timestamp).toLocaleString()}</code></small>
-				</li>
+				<Operation {op} {pantry} {users} {editorStatus} />
 			{/each}
 		</ul>
 	</div>

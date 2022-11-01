@@ -25,7 +25,7 @@
 			await fetchAuthed('/pantries', { method: 'POST', body: JSON.stringify({ name, description }) })
 		).json()) as Pantry;
 		invalidate('/pantries');
-		// window.location.assign(`/pantries/${pantry._id}`);
+		window.location.assign(`/pantries/${pantry._id}`);
 	};
 </script>
 

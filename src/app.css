@@ -246,6 +246,7 @@ li {
 	display: flex;
 	flex-direction: column;
 	background: var(--base01);
+	gap: 8px;
 }
 
 ul {

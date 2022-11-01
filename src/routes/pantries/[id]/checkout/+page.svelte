@@ -8,10 +8,10 @@
 	export let data: PageData;
 	let pantry: Pantry;
 	$: pantry = data.pantry;
-	let users: Record<Id, UserRecord>;
-	$: users = data.users;
+	// let users: Record<Id, UserRecord>;
+	//$: users = data.users;
 
-	let search: String;
+	let search: string;
 	let amounts: Record<Id, number> = {};
 	$: {
 		for (const item of pantry.inventory) {
@@ -29,9 +29,10 @@
 		const checkoutData: CheckoutData = {
 			optionalInfo,
 			itemAmounts: amounts,
-			approved: false
+			approved: false,
+			pending: true
 		};
-		await fetchAuthed(window.location.href, {
+		await fetchAuthed(`./checkout`, {
 			method: 'POST',
 			body: JSON.stringify(checkoutData)
 		});
@@ -40,14 +41,14 @@
 
 <main>
 	<Header href=".">Checkout items</Header>
-	<h2>{pantry.name}</h2>
-	<p>{pantry.description}</p>
+	<h2>{pantry.name ?? 'Unnamed pantry'}</h2>
+	<p>{pantry.description ?? 'No description provided'}</p>
 	<input type="text" placeholder="Search" bind:value={search} />
 	<ul>
 		{#each pantry.inventory.filter((i) => {
 			if (!search) return i;
 			return i.name.search(RegExp(`${search}`, 'i')) != -1;
-		}) as item, i}
+		}) as item, _i}
 			<li>
 				<p>{item.name} ({item.amount} in stock)</p>
 				<input bind:value={amounts[item._id]} min="0" max={item.amount} type="number" />
