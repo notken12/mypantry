@@ -1,14 +1,14 @@
 // Server side Firebase
 import { initializeApp } from 'firebase-admin/app';
 import { FIREBASE_ADMIN_CONFIG } from '$env/static/private';
-import admin, { credential } from 'firebase-admin';
+import admin from 'firebase-admin';
 import type { Id, Pantry } from './Pantry';
 import type { UserRecord } from 'firebase-admin/lib/auth/user-record';
 import type { RequestEvent } from '@sveltejs/kit';
 
 const serviceAccount = JSON.parse(FIREBASE_ADMIN_CONFIG);
 export const app = initializeApp({
-  credential: credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccount),
   databaseURL: `https://${serviceAccount.project_id}.firebaseio.com`
 });
 export const auth = admin.auth();
